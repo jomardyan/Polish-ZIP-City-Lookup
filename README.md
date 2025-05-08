@@ -108,6 +108,8 @@ Use Hosted version: https://jomardyan.github.io/Polish-ZIP-City-Lookup/
 ## 📝 License & Rights
 
 © iCredit Hayk Jomardyan 2025. All rights reserved.
+![License](https://img.shields.io/github/license/jomardyan/Polish-ZIP-City-Lookup)
+
 
 ---
 
