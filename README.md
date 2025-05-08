@@ -1,4 +1,11 @@
 # Polish ZIP & City Lookup 📮
+![License](https://img.shields.io/github/license/jomardyan/Polish-ZIP-City-Lookup)
+![Last Commit](https://img.shields.io/github/last-commit/jomardyan/Polish-ZIP-City-Lookup)
+![Repo Size](https://img.shields.io/github/repo-size/jomardyan/Polish-ZIP-City-Lookup)
+![Languages](https://img.shields.io/github/languages/top/jomardyan/Polish-ZIP-City-Lookup)
+![Stars](https://img.shields.io/github/stars/jomardyan/Polish-ZIP-City-Lookup?style=social)
+![Forks](https://img.shields.io/github/forks/jomardyan/Polish-ZIP-City-Lookup?style=social)
+![GitHub issues](https://img.shields.io/github/issues/jomardyan/Polish-ZIP-City-Lookup)
 
 A lightweight, user-friendly web application for looking up Polish postal ZIP codes and cities. It supports both single and batch lookups, interactive map visualization, dark/light themes, and bilingual (English/Polish) interfaces.
 
