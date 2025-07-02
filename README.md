@@ -13,7 +13,7 @@ Use Hosted version: https://jomardyan.github.io/Polish-ZIP-City-Lookup/
 
 ---
 
-## 🚀 Features
+## Features
 
 * **Single Lookup**: Convert a ZIP code to its corresponding city (and vice versa).
 * **Batch Processing**: Import CSV or Excel files—or paste multiple entries—to process ZIP ⇄ city conversions in bulk.
@@ -23,7 +23,7 @@ Use Hosted version: https://jomardyan.github.io/Polish-ZIP-City-Lookup/
 
 ---
 
-## 📦 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -112,5 +112,3 @@ Use Hosted version: https://jomardyan.github.io/Polish-ZIP-City-Lookup/
 
 
 ---
-
-*Made with ❤️ for easy postal code and city lookups in Poland.*
