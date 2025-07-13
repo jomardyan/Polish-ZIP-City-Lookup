@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A lightweight, user-friendly web application for looking up Polish postal ZIP codes and cities" />
+  <meta name="keywords" content="postal codes, zip codes, poland, lookup, cities" />
+  <meta name="author" content="Hayk Jomardyan" />
+  <title>Polish ZIP & City Lookup</title>
+  
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="app" :class="theme">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" :class="{'dark': theme==='dark', 'navbar-dark': theme==='dark'}">
+      <a class="navbar-brand" href="#" aria-label="Home">📮 {{ $t('brand') }}</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item" :class="{active: activeTab==='single'}">
+            <a class="nav-link" href="#" @click.prevent="activeTab='single'" :aria-current="activeTab==='single' ? 'page' : null">
+              <i class="bi bi-search"></i> {{ $t('lookup') }}
+            </a>
+          </li>
+          <li class="nav-item" :class="{active: activeTab==='batch'}">
+            <a class="nav-link" href="#" @click.prevent="activeTab='batch'" :aria-current="activeTab==='batch' ? 'page' : null">
+              <i class="bi bi-list-ul"></i> {{ $t('batch') }}
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :aria-label="$t('changeLanguage')">
+              <i class="bi bi-translate"></i> {{ locale.toUpperCase() }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="langDropdown">
+              <a class="dropdown-item" href="#" @click.prevent="setLocale('en')" :class="{active: locale==='en'}">🇺🇸 English</a>
+              <a class="dropdown-item" href="#" @click.prevent="setLocale('pl')" :class="{active: locale==='pl'}">🇵🇱 Polski</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" @click.prevent="toggleTheme" :aria-label="$t('toggleTheme')">
+              <i :class="theme==='light' ? 'bi bi-moon' : 'bi bi-sun'"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container py-4">
+      <!-- Alerts -->
+      <div v-if="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> {{ errorMessage }}
+        <button type="button" class="close" @click="errorMessage=''" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div v-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> {{ successMessage }}
+        <button type="button" class="close" @click="successMessage=''" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- Single Lookup -->
+      <div v-show="activeTab==='single'" role="tabpanel" aria-labelledby="single-tab">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="zipInput" class="sr-only">{{ $t('zipPlaceholder') }}</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="bi bi-envelope" aria-hidden="true"></i>
+                </span>
+              </div>
+              <input 
+                id="zipInput"
+                v-model="singleZip" 
+                type="text" 
+                class="form-control" 
+                :class="{'is-invalid': zipValidationError}"
+                :placeholder="$t('zipPlaceholder')" 
+                autofocus 
+                autocomplete="postal-code"
+                @keyup.enter="lookupSingle('zip')"
+                @input="zipValidationError = ''"
+              />
+              <div class="input-group-append">
+                <button 
+                  class="btn btn-primary" 
+                  @click="lookupSingle('zip')" 
+                  :disabled="loading"
+                  :aria-label="$t('lookupCity')"
+                >
+                  <span v-if="loading && lookupType==='zip'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span v-if="!loading || lookupType!=='zip'">{{ $t('lookupCity') }}</span>
+                  <span v-else class="sr-only">{{ $t('loading') }}</span>
+                </button>
+                <button 
+                  class="btn btn-outline-secondary" 
+                  @click="singleZip=''; zipValidationError=''" 
+                  :title="$t('clear')"
+                  :aria-label="$t('clear')"
+                >
+                  <i class="bi bi-x-circle" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div v-if="zipValidationError" class="invalid-feedback">{{ zipValidationError }}</div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cityInput" class="sr-only">{{ $t('cityPlaceholder') }}</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                </span>
+              </div>
+              <input 
+                id="cityInput"
+                v-model="singleCity" 
+                type="text" 
+                class="form-control" 
+                :class="{'is-invalid': cityValidationError}"
+                :placeholder="$t('cityPlaceholder')" 
+                autocomplete="address-level2"
+                @keyup.enter="lookupSingle('city')"
+                @input="cityValidationError = ''"
+              />
+              <div class="input-group-append">
+                <button 
+                  class="btn btn-primary" 
+                  @click="lookupSingle('city')" 
+                  :disabled="loading"
+                  :aria-label="$t('lookupZip')"
+                >
+                  <span v-if="loading && lookupType==='city'" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span v-if="!loading || lookupType!=='city'">{{ $t('lookupZip') }}</span>
+                  <span v-else class="sr-only">{{ $t('loading') }}</span>
+                </button>
+                <button 
+                  class="btn btn-outline-secondary" 
+                  @click="singleCity=''; cityValidationError=''" 
+                  :title="$t('clear')"
+                  :aria-label="$t('clear')"
+                >
+                  <i class="bi bi-x-circle" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div v-if="cityValidationError" class="invalid-feedback">{{ cityValidationError }}</div>
+          </div>
+        </div>
+        
+        <button 
+          v-if="results.length" 
+          class="btn btn-outline-danger mb-3" 
+          @click="clearResults"
+          :aria-label="$t('clearResults')"
+        >
+          <i class="bi bi-trash" aria-hidden="true"></i> {{ $t('clearResults') }}
+        </button>
+        
+        <div v-if="results.length" class="results-section">
+          <h5 id="results-heading">{{ $t('results') }} ({{ results.length }})</h5>
+          <div class="table-responsive">
+            <table class="table table-hover table-striped" :class="{'dark': theme==='dark'}" aria-labelledby="results-heading">
+              <thead>
+                <tr>
+                  <th scope="col">{{ $t('input') }}</th>
+                  <th scope="col">{{ $t('output') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(result, index) in results" :key="index">
+                  <td>{{ result.input }}</td>
+                  <td>{{ result.output.join(', ') }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Batch Lookup -->
+      <div v-show="activeTab==='batch'" role="tabpanel" aria-labelledby="batch-tab">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="fileInput">{{ $t('importFile') }}</label>
+            <div class="custom-file">
+              <input 
+                type="file" 
+                class="custom-file-input" 
+                id="fileInput" 
+                @change="importFileChange" 
+                accept=".csv, .xlsx, .xls"
+                aria-describedby="fileInputHelp"
+              >
+              <label class="custom-file-label" for="fileInput" :class="{'dark': theme==='dark'}">
+                {{ $t('chooseFile') }}
+              </label>
+            </div>
+            <small id="fileInputHelp" class="form-text text-muted">CSV, Excel (.xlsx, .xls) files supported</small>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="batchTextarea">{{ $t('pasteInputs') }}</label>
+            <textarea 
+              id="batchTextarea"
+              v-model="batchInputs" 
+              class="form-control" 
+              rows="4" 
+              :placeholder="$t('pastePlaceholder')"
+              aria-describedby="batchTextareaHelp"
+            ></textarea>
+            <small id="batchTextareaHelp" class="form-text text-muted">One entry per line</small>
+          </div>
+        </div>
+        
+        <div class="form-row align-items-end">
+          <div class="form-group col-md-3">
+            <label for="modeSelect">{{ $t('mode') }}</label>
+            <select id="modeSelect" v-model="mode" class="form-control">
+              <option value="zip">{{ $t('zipCity') }}</option>
+              <option value="city">{{ $t('cityZip') }}</option>
+            </select>
+          </div>
+          <div class="form-group col-md-3">
+            <button 
+              class="btn btn-success btn-block" 
+              @click="processBatch" 
+              :disabled="loading || !batchInputs.trim()"
+              :aria-label="$t('processBatch')"
+            >
+              <span v-if="loading && batchMode" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span v-if="!loading || !batchMode">{{ $t('processBatch') }}</span>
+              <span v-else class="sr-only">{{ $t('loading') }}</span>
+            </button>
+          </div>
+          <div class="form-group col-md-6 text-right">
+            <div class="btn-group" role="group" aria-label="Export options">
+              <button 
+                class="btn btn-outline-secondary" 
+                :disabled="!results.length" 
+                @click="copyToClipboard"
+                :aria-label="$t('copy')"
+              >
+                <i class="bi bi-clipboard" aria-hidden="true"></i> {{ $t('copy') }}
+              </button>
+              <button 
+                class="btn btn-outline-secondary" 
+                :disabled="!results.length" 
+                @click="exportCSV"
+                :aria-label="$t('csv')"
+              >
+                <i class="bi bi-file-earmark-csv" aria-hidden="true"></i> {{ $t('csv') }}
+              </button>
+              <button 
+                class="btn btn-outline-secondary" 
+                :disabled="!results.length" 
+                @click="exportExcel"
+                :aria-label="$t('excel')"
+              >
+                <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> {{ $t('excel') }}
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <button 
+          v-if="results.length" 
+          class="btn btn-outline-danger mb-3" 
+          @click="clearResults"
+          :aria-label="$t('clearResults')"
+        >
+          <i class="bi bi-trash" aria-hidden="true"></i> {{ $t('clearResults') }}
+        </button>
+        
+        <div v-if="results.length" class="results-section">
+          <h5 id="batch-results-heading">{{ $t('batchResults') }} ({{ results.length }})</h5>
+          <div class="table-responsive">
+            <table class="table table-hover table-striped" :class="{'dark': theme==='dark'}" aria-labelledby="batch-results-heading">
+              <thead>
+                <tr>
+                  <th scope="col">{{ $t('input') }}</th>
+                  <th scope="col">{{ $t('output') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(result, index) in results" :key="index">
+                  <td>{{ result.input }}</td>
+                  <td>{{ result.output.join(', ') }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map View -->
+      <div class="mt-4">
+        <h5 id="map-heading">{{ $t('mapView') }}</h5>
+        <div id="map" role="img" :aria-label="$t('mapView')" aria-describedby="map-description"></div>
+        <small id="map-description" class="form-text text-muted">
+          Interactive map showing locations of search results
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js" integrity="sha256-3RGl5sxbdD3xAV5yyQ4I6Vd5N1wVaXBPx3eX+2lG7fY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue-i18n@8.28.1/dist/vue-i18n.min.js" integrity="sha256-QAmNfCYVVYLLzOI5YjGOdQ4Cv5DWlJBdAhO8L0qRq6s=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js" integrity="sha256-h4A6KKqiC0xqhHs5xsQr5XnLJzjl7r5VzqP88wpk/YQ=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" integrity="sha256-K8jJOKqCMKnH9M8Qj83Jdh0Uw5o3eHOKM4qxFl9VftY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" integrity="sha256-5qVJhWvCxjEVpthJxZ7Q0Xtg2Y4YVrJJmUZGJUOtfWU=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js" integrity="sha256-F8jWK4YuGHwjGLhCO8TJUh7w4LqSHD/KPq7h8DgOuUQ=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Custom Application Script -->
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Test</title>
+</head>
+<body>
+  <div id="app">
+    <h1>{{ message }}</h1>
+    <p>{{ $t('hello') }}</p>
+  </div>
+
+  <script src="https://unpkg.com/vue@2.7.16/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-i18n@8.28.1/dist/vue-i18n.js"></script>
+  <script>
+    const messages = {
+      en: { hello: 'Hello World!' }
+    };
+    const i18n = new VueI18n({ locale: 'en', messages });
+    
+    new Vue({
+      i18n,
+      el: '#app',
+      data: {
+        message: 'Vue is working!'
+      }
+    });
+  </script>
+</body>
+</html>

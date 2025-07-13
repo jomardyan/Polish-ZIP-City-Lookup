@@ -1,0 +1,40 @@
+{
+  "name": "polish-zip-city-lookup",
+  "version": "1.0.0",
+  "description": "A lightweight, user-friendly web application for looking up Polish postal ZIP codes and cities",
+  "main": "index.html",
+  "scripts": {
+    "dev": "http-server . -p 8000 -o",
+    "build": "npm run lint && npm run test",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint assets/js --ext .js",
+    "lint:fix": "eslint assets/js --ext .js --fix",
+    "serve": "http-server . -p 8000"
+  },
+  "keywords": [
+    "postal-codes",
+    "zip-codes",
+    "poland",
+    "vue",
+    "javascript",
+    "leaflet",
+    "maps"
+  ],
+  "author": "Hayk Jomardyan",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "http-server": "^14.1.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jomardyan/Polish-ZIP-City-Lookup.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jomardyan/Polish-ZIP-City-Lookup/issues"
+  },
+  "homepage": "https://jomardyan.github.io/Polish-ZIP-City-Lookup/"
+}
