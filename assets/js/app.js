@@ -251,18 +251,18 @@ function initializeApp() {
         document.addEventListener('keydown', (e) => {
           if (e.ctrlKey || e.metaKey) {
             switch (e.key) {
-              case '1':
-                e.preventDefault();
-                this.activeTab = 'single';
-                break;
-              case '2':
-                e.preventDefault();
-                this.activeTab = 'batch';
-                break;
-              case 'k':
-                e.preventDefault();
-                this.clearResults();
-                break;
+            case '1':
+              e.preventDefault();
+              this.activeTab = 'single';
+              break;
+            case '2':
+              e.preventDefault();
+              this.activeTab = 'batch';
+              break;
+            case 'k':
+              e.preventDefault();
+              this.clearResults();
+              break;
             }
           }
         });

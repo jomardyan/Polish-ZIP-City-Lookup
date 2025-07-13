@@ -8,8 +8,8 @@
     "build": "npm run lint && npm run test",
     "test": "jest",
     "test:watch": "jest --watch",
-    "lint": "eslint assets/js src --ext .js",
-    "lint:fix": "eslint assets/js src --ext .js --fix",
+    "lint": "eslint assets/js --ext .js",
+    "lint:fix": "eslint assets/js --ext .js --fix",
     "serve": "http-server . -p 8000"
   },
   "keywords": [
