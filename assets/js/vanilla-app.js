@@ -72,7 +72,7 @@ class PolishZipLookup {
       }
     });
 
-    console.log('Custom dropdowns initialized');
+    console.log('Custom dropdowns initialized'); // eslint-disable-line no-console
   }
 
   getDefaultSettings() {
@@ -186,7 +186,6 @@ class PolishZipLookup {
   }
 
   updateLanguageDropdown(activeLang) {
-    const languageButton = document.querySelector('#langDropdown');
     const languageOptions = document.querySelectorAll('.language-option');
     
     // Remove active state from all options
