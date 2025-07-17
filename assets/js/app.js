@@ -4,6 +4,8 @@
 $(document).ready(function() {
     'use strict';
     
+    console.log('Document ready fired, initializing Polish ZIP App...');
+    
     // Initialize the application
     const PolishZipApp = {
         // Application configuration
@@ -71,6 +73,8 @@ $(document).ready(function() {
         // Initialize the application
         init: function() {
             console.log('Initializing Polish ZIP App v' + this.config.VERSION);
+            console.log('jQuery available:', typeof $ !== 'undefined');
+            console.log('Bootstrap available:', typeof bootstrap !== 'undefined');
             
             // Initialize Bootstrap components
             this.initBootstrapComponents();
@@ -306,18 +310,43 @@ $(document).ready(function() {
             // Search form handlers
             $('#zipForm').on('submit', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                console.log('ZIP form submitted');
                 self.performZipSearch();
+                return false;
             });
             
             $('#cityForm').on('submit', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                console.log('City form submitted');
                 self.performCitySearch();
+                return false;
+            });
+            
+            // Make sure buttons don't submit forms
+            $('#zipLookupBtn').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('ZIP lookup button clicked');
+                self.performZipSearch();
+                return false;
+            });
+            
+            $('#cityLookupBtn').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('City lookup button clicked');
+                self.performCitySearch();
+                return false;
             });
             
             // Example buttons - ZIP codes
             $(document).on('click', '.zip-example', function(e) {
                 e.preventDefault();
+                console.log('ZIP example clicked');
                 const zipCode = $(this).data('zip');
+                console.log('ZIP code:', zipCode);
                 $('#zipInput').val(zipCode);
                 self.performZipSearch();
             });
@@ -325,7 +354,9 @@ $(document).ready(function() {
             // Example buttons - Cities
             $(document).on('click', '.city-example', function(e) {
                 e.preventDefault();
+                console.log('City example clicked');
                 const city = $(this).data('city');
+                console.log('City:', city);
                 $('#cityInput').val(city);
                 self.performCitySearch();
             });
@@ -413,6 +444,10 @@ $(document).ready(function() {
         performZipSearch: function() {
             const zipCode = $('#zipInput').val().trim();
             
+            // Add visual feedback
+            $('body').append('<div id="debug-feedback" style="position:fixed;top:10px;right:10px;background:blue;color:white;padding:10px;z-index:9999;">ZIP Search: ' + zipCode + '</div>');
+            setTimeout(() => $('#debug-feedback').remove(), 2000);
+            
             if (!zipCode) {
                 this.showAlert('Please enter a ZIP code', 'warning');
                 return;
@@ -430,6 +465,10 @@ $(document).ready(function() {
         // Perform city search
         performCitySearch: function() {
             const cityName = $('#cityInput').val().trim();
+            
+            // Add visual feedback
+            $('body').append('<div id="debug-feedback" style="position:fixed;top:10px;right:10px;background:green;color:white;padding:10px;z-index:9999;">City Search: ' + cityName + '</div>');
+            setTimeout(() => $('#debug-feedback').remove(), 2000);
             
             if (!cityName) {
                 this.showAlert('Please enter a city name', 'warning');
