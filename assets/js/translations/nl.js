@@ -101,8 +101,6 @@ if (typeof window !== 'undefined') {
     invalidCity: 'Voer een stadsnaam in',
     notFound: 'Niet gevonden',
     invalidFormat: 'Ongeldig formaat',
-    loading: 'Laden...',
-    success: 'Bewerking succesvol voltooid',
     
     // History and favorites
     searchHistory: 'Zoekgeschiedenis',
