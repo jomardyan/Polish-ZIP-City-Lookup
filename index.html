@@ -264,6 +264,242 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" href="assets/css/styles.css">
   
+  <!-- Fallback CSS for when external CDNs are blocked -->
+  <style>
+    /* Basic Bootstrap-like fallback styles */
+    * { box-sizing: border-box; }
+    body { 
+      margin: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.5;
+      color: #212529;
+      background: #f8f9fa;
+    }
+    .container-fluid { width: 100%; padding: 0 15px; margin: 0 auto; }
+    .row { display: flex; flex-wrap: wrap; margin: 0 -15px; }
+    .col-12 { flex: 0 0 100%; max-width: 100%; padding: 0 15px; }
+    .col-lg-6 { flex: 0 0 50%; max-width: 50%; padding: 0 15px; }
+    .col-md-6 { flex: 0 0 50%; max-width: 50%; padding: 0 15px; }
+    
+    /* Navbar styles */
+    .navbar { 
+      position: sticky; 
+      top: 0; 
+      z-index: 1020; 
+      background: #f8f9fa !important; 
+      padding: 0.5rem 1rem; 
+      border-bottom: 1px solid #dee2e6;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .navbar-brand { 
+      display: flex; 
+      align-items: center; 
+      font-size: 1.25rem; 
+      font-weight: 700; 
+      color: #212529 !important; 
+      text-decoration: none; 
+    }
+    .navbar-nav { 
+      display: flex; 
+      list-style: none; 
+      margin: 0; 
+      padding: 0; 
+      flex-direction: row; 
+    }
+    .nav-item { margin: 0 0.5rem; }
+    .nav-link { 
+      color: #6c757d !important; 
+      text-decoration: none; 
+      padding: 0.5rem 1rem; 
+      border-radius: 0.25rem;
+      transition: all 0.2s;
+    }
+    .nav-link:hover { color: #007bff !important; background: rgba(0, 123, 255, 0.1); }
+    .nav-link.active { color: #007bff !important; background: rgba(0, 123, 255, 0.1); }
+    
+    /* Cards */
+    .card { 
+      background: #fff; 
+      border: 1px solid #dee2e6; 
+      border-radius: 0.375rem; 
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      margin-bottom: 1rem;
+    }
+    .card-body { padding: 1.25rem; }
+    .card-header { 
+      padding: 0.75rem 1.25rem; 
+      background: #f8f9fa; 
+      border-bottom: 1px solid #dee2e6; 
+      font-weight: 600;
+    }
+    
+    /* Forms */
+    .form-control { 
+      width: 100%; 
+      padding: 0.375rem 0.75rem; 
+      font-size: 1rem; 
+      border: 1px solid #ced4da; 
+      border-radius: 0.375rem; 
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-control:focus { 
+      border-color: #007bff; 
+      outline: 0; 
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); 
+    }
+    .form-label { 
+      display: block; 
+      margin-bottom: 0.5rem; 
+      font-weight: 500; 
+    }
+    .input-group { 
+      display: flex; 
+      width: 100%; 
+      margin-bottom: 1rem; 
+    }
+    .input-group-text { 
+      padding: 0.375rem 0.75rem; 
+      background: #007bff; 
+      color: #fff; 
+      border: 1px solid #007bff; 
+      border-radius: 0.375rem 0 0 0.375rem; 
+    }
+    .input-group .form-control { 
+      border-radius: 0 0.375rem 0.375rem 0; 
+      border-left: 0; 
+    }
+    
+    /* Buttons */
+    .btn { 
+      display: inline-block; 
+      padding: 0.375rem 0.75rem; 
+      font-size: 1rem; 
+      border: 1px solid transparent; 
+      border-radius: 0.375rem; 
+      text-decoration: none; 
+      cursor: pointer; 
+      transition: all 0.15s;
+    }
+    .btn-primary { 
+      background: #007bff; 
+      border-color: #007bff; 
+      color: #fff; 
+    }
+    .btn-primary:hover { 
+      background: #0056b3; 
+      border-color: #0056b3; 
+    }
+    .btn-success { 
+      background: #28a745; 
+      border-color: #28a745; 
+      color: #fff; 
+    }
+    .btn-success:hover { 
+      background: #218838; 
+      border-color: #218838; 
+    }
+    .btn-outline-primary { 
+      background: transparent; 
+      border-color: #007bff; 
+      color: #007bff; 
+    }
+    .btn-outline-primary:hover { 
+      background: #007bff; 
+      color: #fff; 
+    }
+    .btn-sm { 
+      padding: 0.25rem 0.5rem; 
+      font-size: 0.875rem; 
+    }
+    .btn-lg { 
+      padding: 0.5rem 1rem; 
+      font-size: 1.125rem; 
+    }
+    
+    /* Utilities */
+    .d-flex { display: flex !important; }
+    .align-items-center { align-items: center !important; }
+    .justify-content-between { justify-content: space-between !important; }
+    .text-center { text-align: center !important; }
+    .text-muted { color: #6c757d !important; }
+    .text-primary { color: #007bff !important; }
+    .text-success { color: #28a745 !important; }
+    .fw-bold { font-weight: 700 !important; }
+    .fw-semibold { font-weight: 600 !important; }
+    .mb-0 { margin-bottom: 0 !important; }
+    .mb-1 { margin-bottom: 0.25rem !important; }
+    .mb-2 { margin-bottom: 0.5rem !important; }
+    .mb-3 { margin-bottom: 1rem !important; }
+    .mb-4 { margin-bottom: 1.5rem !important; }
+    .me-2 { margin-right: 0.5rem !important; }
+    .me-3 { margin-right: 1rem !important; }
+    .ms-1 { margin-left: 0.25rem !important; }
+    .mt-3 { margin-top: 1rem !important; }
+    .mt-4 { margin-top: 1.5rem !important; }
+    .py-4 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+    .p-4 { padding: 1.5rem !important; }
+    .g-4 > * { padding: 1.5rem; }
+    .gap-2 > * { margin-right: 0.5rem; }
+    .rounded-circle { border-radius: 50% !important; }
+    .bg-primary { background-color: #007bff !important; }
+    .bg-success { background-color: #28a745 !important; }
+    .bg-light { background-color: #f8f9fa !important; }
+    .bg-opacity-10 { opacity: 0.1; }
+    .badge { 
+      display: inline-block; 
+      padding: 0.25em 0.6em; 
+      font-size: 0.75em; 
+      border-radius: 0.375rem; 
+    }
+    .badge.bg-info { background-color: #17a2b8 !important; color: #fff; }
+    .fs-6 { font-size: 1rem !important; }
+    .px-3 { padding-left: 1rem !important; padding-right: 1rem !important; }
+    .py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+    
+    /* Grid system responsive */
+    @media (max-width: 768px) {
+      .col-lg-6, .col-md-6 { flex: 0 0 100%; max-width: 100%; }
+      .navbar-nav { flex-direction: column; }
+    }
+    
+    /* Loading and display utilities */
+    .d-none { display: none !important; }
+    .d-block { display: block !important; }
+    
+    /* Tab styles */
+    [data-tab-content] { display: none; }
+    [data-tab-content][style*="block"] { display: block !important; }
+    
+    /* Map placeholder */
+    #map { 
+      height: 400px; 
+      background: #e9ecef; 
+      border: 1px solid #dee2e6; 
+      border-radius: 0.375rem; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: #6c757d; 
+    }
+    
+    /* Remove problematic styles that might cause layout issues */
+    .sticky-top { position: sticky; top: 0; z-index: 1020; }
+    .shadow-sm { box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important; }
+    .border-bottom { border-bottom: 1px solid #dee2e6 !important; }
+    
+    /* Hide dropdowns initially */
+    .dropdown-menu { display: none; }
+    
+    /* Simple button toggle */
+    .navbar-toggler { 
+      background: none; 
+      border: 1px solid #rgba(0,0,0,.1); 
+      padding: 0.25rem 0.75rem; 
+      border-radius: 0.375rem; 
+    }
+  </style>
+  
   <!-- Structured Data for SEO -->
   <script type="application/ld+json">
   {
@@ -316,193 +552,77 @@
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm border-bottom" aria-label="Main navigation">
-      <a class="navbar-brand d-flex align-items-center hover-lift" href="#" aria-label="Polish ZIP & City Lookup - Home">
-        <span class="navbar-brand-icon me-2 fs-4" role="img" aria-label="Mail icon">📮</span>
-        <span data-i18n="brandShort" class="fw-bold">Polish ZIP Lookup</span>
-      </a>
-      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" 
-              aria-controls="navMenu" aria-expanded="false" aria-label="Toggle main navigation menu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav me-auto nav-tabs-modern" role="tablist" aria-label="Application sections">
-          <li class="nav-item" role="none">
-            <a class="nav-link active hover-scale" href="#" data-tab="single" role="tab" 
-               aria-selected="true" aria-controls="singleTab" id="singleTabLink"
-               title="Single ZIP code or city lookup">
-              <i class="bi bi-search" aria-hidden="true"></i> 
-              <span data-i18n="lookup">Lookup</span>
-              <span class="badge bg-primary rounded-pill ms-1" id="singleCount" style="display: none;">0</span>
-            </a>
-          </li>
-          <li class="nav-item" role="none">
-            <a class="nav-link hover-scale" href="#" data-tab="batch" role="tab" 
-               aria-selected="false" aria-controls="batchTab" id="batchTabLink"
-               title="Process multiple ZIP codes or cities at once">
-              <i class="bi bi-list-ul" aria-hidden="true"></i> 
-              <span data-i18n="batch">Batch</span>
-              <span class="badge bg-secondary rounded-pill ms-1" id="batchCount" style="display: none;">0</span>
-            </a>
-          </li>
-          <li class="nav-item" role="none">
-            <a class="nav-link hover-scale" href="#" data-tab="history" role="tab" 
-               aria-selected="false" aria-controls="historyTab" id="historyTabLink"
-               title="View search history and favorites">
-              <i class="bi bi-clock-history" aria-hidden="true"></i> 
-              <span data-i18n="history">History</span>
-              <span class="badge bg-info rounded-pill ms-1" id="historyCount" style="display: none;">0</span>
-            </a>
-          </li>
-          <li class="nav-item" role="none">
-            <a class="nav-link hover-scale" href="#" data-tab="settings" role="tab" 
-               aria-selected="false" aria-controls="settingsTab" id="settingsTabLink"
-               title="Customize application settings and preferences">
-              <i class="bi bi-gear" aria-hidden="true"></i> 
-              <span data-i18n="settings">Settings</span>
-            </a>
-          </li>
-        </ul>
-        <ul class="navbar-nav">
-          <!-- Quick Stats -->
-          <li class="nav-item d-none d-lg-block">
-            <span class="navbar-text small hover-lift">
-              <i class="bi bi-graph-up text-success" aria-hidden="true"></i> 
-              <span data-i18n="totalSearches">Searches</span>: 
-              <span id="totalSearches" class="badge bg-success">0</span>
-            </span>
-          </li>
-          
-          <!-- Enhanced Language Dropdown -->
-          <li class="nav-item dropdown me-2">
-            <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="langDropdown" role="button" 
-               data-bs-toggle="dropdown" aria-expanded="false" 
-               title="Select application language">
-              <i class="bi bi-translate me-1" aria-hidden="true"></i> 
-              <span id="currentLangFlag">🇺🇸</span>
-              <span id="currentLangCode" class="ms-1">EN</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="langDropdown" style="min-width: 250px; border-radius: 12px;">
-              <div class="dropdown-header bg-primary text-white d-flex align-items-center" style="border-radius: 12px 12px 0 0; padding: 12px 16px;">
-                <i class="bi bi-globe2 me-2"></i>
-                <span data-i18n="language" class="fw-semibold">Language</span>
-              </div>
-              <div class="py-2">
-                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="en" data-flag="🇺🇸">
-                  <span class="me-3 fs-5">🇺🇸</span>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">English</div>
-                    <small class="text-muted">United States</small>
-                  </div>
-                  <small class="text-muted fw-bold">EN</small>
-                </a>
-                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="pl" data-flag="🇵🇱">
-                  <span class="me-3 fs-5">🇵🇱</span>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Polski</div>
-                    <small class="text-muted">Polska</small>
-                  </div>
-                  <small class="text-muted fw-bold">PL</small>
-                </a>
-                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="de" data-flag="🇩🇪">
-                  <span class="me-3 fs-5">🇩🇪</span>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Deutsch</div>
-                    <small class="text-muted">Deutschland</small>
-                  </div>
-                  <small class="text-muted fw-bold">DE</small>
-                </a>
-                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="fr" data-flag="🇫🇷">
-                  <span class="me-3 fs-5">🇫🇷</span>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Français</div>
-                    <small class="text-muted">France</small>
-                  </div>
-                  <small class="text-muted fw-bold">FR</small>
-                </a>
-                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="es" data-flag="🇪🇸">
-                  <span class="me-3 fs-5">🇪🇸</span>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Español</div>
-                    <small class="text-muted">España</small>
-                  </div>
-                  <small class="text-muted fw-bold">ES</small>
-                </a>
-                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="it" data-flag="🇮🇹">
-                  <span class="me-3 fs-5">🇮🇹</span>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Italiano</div>
-                    <small class="text-muted">Italia</small>
-                  </div>
-                  <small class="text-muted fw-bold">IT</small>
-                </a>
-                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="nl" data-flag="🇳🇱">
-                  <span class="me-3 fs-5">🇳🇱</span>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Nederlands</div>
-                    <small class="text-muted">Nederland</small>
-                  </div>
-                  <small class="text-muted fw-bold">NL</small>
-                </a>
-                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="ru" data-flag="🇷🇺">
-                  <span class="me-3 fs-5">🇷🇺</span>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Русский</div>
-                    <small class="text-muted">Россия</small>
-                  </div>
-                  <small class="text-muted fw-bold">RU</small>
-                </a>
-                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="zh" data-flag="🇨🇳">
-                  <span class="me-3 fs-5">🇨🇳</span>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">中文</div>
-                    <small class="text-muted">中国</small>
-                  </div>
-                  <small class="text-muted fw-bold">ZH</small>
-                </a>
-              </div>
-            </div>
-          </li>
-          
-          <!-- Enhanced Theme Dropdown -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="themeDropdown" role="button" 
-               data-bs-toggle="dropdown" aria-expanded="false" 
-               title="Switch theme">
-              <i class="bi bi-circle-half me-1" aria-hidden="true"></i>
-              <span class="ms-1">Auto</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="themeDropdown" style="min-width: 200px; border-radius: 12px;">
-              <div class="dropdown-header bg-secondary text-white d-flex align-items-center" style="border-radius: 12px 12px 0 0; padding: 12px 16px;">
-                <i class="bi bi-palette me-2"></i>
-                <span class="fw-semibold">Theme</span>
-              </div>
-              <div class="py-2">
-                <a class="dropdown-item theme-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-theme="light">
-                  <i class="bi bi-sun me-3 fs-5"></i>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Light</div>
-                  </div>
-                  <i class="bi bi-check theme-check text-success" style="display: none;"></i>
-                </a>
-                <a class="dropdown-item theme-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-theme="dark">
-                  <i class="bi bi-moon me-3 fs-5"></i>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Dark</div>
-                  </div>
-                  <i class="bi bi-check theme-check text-success" style="display: none;"></i>
-                </a>
-                <a class="dropdown-item theme-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1 active" href="#" data-theme="auto">
-                  <i class="bi bi-circle-half me-3 fs-5"></i>
-                  <div class="flex-fill">
-                    <div class="fw-semibold">Auto</div>
-                  </div>
-                  <i class="bi bi-check theme-check text-success"></i>
-                </a>
-              </div>
-            </div>
-          </li>
-        </ul>
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center hover-lift" href="#" aria-label="Polish ZIP & City Lookup - Home">
+          <span class="navbar-brand-icon me-2 fs-4" role="img" aria-label="Mail icon">📮</span>
+          <span data-i18n="brandShort" class="fw-bold">Polish ZIP Lookup</span>
+        </a>
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" 
+                aria-controls="navMenu" aria-expanded="false" aria-label="Toggle main navigation menu">
+          <span class="navbar-toggler-icon">☰</span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav me-auto nav-tabs-modern" role="tablist" aria-label="Application sections">
+            <li class="nav-item" role="none">
+              <a class="nav-link active hover-scale" href="#" data-tab="single" role="tab" 
+                 aria-selected="true" aria-controls="singleTab" id="singleTabLink"
+                 title="Single ZIP code or city lookup">
+                <span data-i18n="lookup">Lookup</span>
+                <span class="badge bg-primary rounded-pill ms-1" id="singleCount" style="display: none;">0</span>
+              </a>
+            </li>
+            <li class="nav-item" role="none">
+              <a class="nav-link hover-scale" href="#" data-tab="batch" role="tab" 
+                 aria-selected="false" aria-controls="batchTab" id="batchTabLink"
+                 title="Process multiple ZIP codes or cities at once">
+                <span data-i18n="batch">Batch</span>
+                <span class="badge bg-secondary rounded-pill ms-1" id="batchCount" style="display: none;">0</span>
+              </a>
+            </li>
+            <li class="nav-item" role="none">
+              <a class="nav-link hover-scale" href="#" data-tab="history" role="tab" 
+                 aria-selected="false" aria-controls="historyTab" id="historyTabLink"
+                 title="View search history and favorites">
+                <span data-i18n="history">History</span>
+                <span class="badge bg-info rounded-pill ms-1" id="historyCount" style="display: none;">0</span>
+              </a>
+            </li>
+            <li class="nav-item" role="none">
+              <a class="nav-link hover-scale" href="#" data-tab="settings" role="tab" 
+                 aria-selected="false" aria-controls="settingsTab" id="settingsTabLink"
+                 title="Customize application settings and preferences">
+                <span data-i18n="settings">Settings</span>
+              </a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <!-- Quick Stats -->
+            <li class="nav-item d-none d-lg-block">
+              <span class="navbar-text small hover-lift">
+                <span data-i18n="totalSearches">Searches</span>: 
+                <span id="totalSearches" class="badge bg-success">0</span>
+              </span>
+            </li>
+            
+            <!-- Simplified Language Dropdown -->
+            <li class="nav-item me-2">
+              <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="langDropdown" 
+                 title="Select application language">
+                <span id="currentLangFlag">🇺🇸</span>
+                <span id="currentLangCode" class="ms-1">EN</span>
+              </a>
+            </li>
+            
+            <!-- Simplified Theme Dropdown -->
+            <li class="nav-item">
+              <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="themeDropdown" 
+                 title="Switch theme">
+                <span class="ms-1">Auto</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
 
@@ -617,7 +737,7 @@
               <div class="card-body p-4">
                 <div class="d-flex align-items-center mb-3">
                   <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-3">
-                    <i class="bi bi-envelope-fill text-primary fs-5"></i>
+                    <span class="text-primary">📮</span>
                   </div>
                   <div>
                     <label for="zipInput" class="form-label fw-bold mb-0">
@@ -629,7 +749,7 @@
                 
                 <div class="input-group input-group-lg mb-3">
                   <span class="input-group-text bg-primary text-white border-0">
-                    <i class="bi bi-envelope" aria-hidden="true"></i>
+                    📮
                   </span>
                   <input 
                     id="zipInput"
@@ -641,8 +761,6 @@
                     autocomplete="postal-code"
                     maxlength="6"
                     pattern="^\d{2}-?\d{3}$"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
                     title="Enter Polish ZIP code"
                  >
                   <button 
@@ -651,7 +769,7 @@
                     type="button"
                     title="Clear ZIP input"
                   >
-                    <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    ✕
                     <span class="sr-only">Clear ZIP input</span>
                   </button>
                 </div>
@@ -663,7 +781,7 @@
                     data-loading="lookupCity"
                     title="Lookup city for this ZIP code"
                   >
-                    <i class="bi bi-search me-2"></i>
+                    🔍
                     <span data-i18n="lookupCity">Lookup City</span>
                     <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
                   </button>
@@ -672,7 +790,7 @@
                 <!-- ZIP Code Examples -->
                 <div class="mt-3">
                   <div class="small text-muted mb-2">
-                    <i class="bi bi-lightbulb me-1"></i>
+                    💡
                     <strong>Examples:</strong>
                   </div>
                   <div class="d-flex flex-wrap gap-1">
@@ -691,7 +809,7 @@
               <div class="card-body p-4">
                 <div class="d-flex align-items-center mb-3">
                   <div class="rounded-circle bg-success bg-opacity-10 p-2 me-3">
-                    <i class="bi bi-geo-alt-fill text-success fs-5"></i>
+                    <span class="text-success">📍</span>
                   </div>
                   <div>
                     <label for="cityInput" class="form-label fw-bold mb-0">
@@ -703,7 +821,7 @@
                 
                 <div class="input-group input-group-lg mb-3">
                   <span class="input-group-text bg-success text-white border-0">
-                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                    📍
                   </span>
                   <input 
                     id="cityInput"
@@ -713,8 +831,6 @@
                     placeholder="Warszawa"
                     autocomplete="address-level2"
                     list="citySuggestions"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
                     title="Enter Polish city name"
                  >
                   <datalist id="citySuggestions"></datalist>
@@ -724,7 +840,7 @@
                     type="button"
                     title="Clear city input"
                   >
-                    <i class="bi bi-x-circle" aria-hidden="true"></i>
+                    ✕
                     <span class="sr-only">Clear city input</span>
                   </button>
                 </div>
@@ -736,7 +852,7 @@
                     data-loading="lookupZip"
                     title="Lookup ZIP codes for this city"
                   >
-                    <i class="bi bi-search me-2"></i>
+                    🔍
                     <span data-i18n="lookupZip">Lookup ZIP</span>
                     <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
                   </button>
@@ -745,7 +861,7 @@
                 <!-- City Examples -->
                 <div class="mt-3">
                   <div class="small text-muted mb-2">
-                    <i class="bi bi-lightbulb me-1"></i>
+                    💡
                     <strong>Examples:</strong>
                   </div>
                   <div class="d-flex flex-wrap gap-1">
@@ -767,15 +883,15 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                   <div class="d-flex flex-wrap gap-2">
                     <button id="swapInputsBtn" class="btn btn-outline-info hover-lift" title="Swap inputs">
-                      <i class="bi bi-arrow-left-right me-1"></i> 
+                      ↔️ 
                       <span data-i18n="swap">Swap</span>
                     </button>
                     <button id="randomSampleBtn" class="btn btn-outline-secondary hover-lift" title="Try random sample">
-                      <i class="bi bi-shuffle me-1"></i> 
+                      🎲 
                       <span data-i18n="sample">Sample</span>
                     </button>
                     <button class="btn btn-outline-warning hover-lift" id="validateInputBtn" title="Validate current input">
-                      <i class="bi bi-check-circle me-1"></i>
+                      ✓
                       <span data-i18n="validate">Validate</span>
                     </button>
                   </div>
@@ -786,11 +902,11 @@
                       style="display: none;"
                       title="Clear all results"
                     >
-                      <i class="bi bi-trash me-1" aria-hidden="true"></i> 
+                      🗑️ 
                       <span data-i18n="clearResults">Clear Results</span>
                     </button>
                     <button class="btn btn-outline-primary hover-lift" id="exportResultsBtn" style="display: none;" title="Export results">
-                      <i class="bi bi-download me-1"></i>
+                      📥
                       <span data-i18n="export">Export</span>
                     </button>
                   </div>
@@ -807,7 +923,7 @@
               <div class="d-flex align-items-center justify-content-between">
                 <div>
                   <h5 class="card-title mb-1 fw-bold text-success">
-                    <i class="bi bi-check-circle me-2"></i>
+                    ✅
                     <span data-i18n="search_results">Search Results</span>
                   </h5>
                   <div class="small text-muted" id="resultsMetadata">Found 0 results</div>
