@@ -1209,18 +1209,21 @@
       console.log('jQuery loaded:', typeof $);
       console.log('Bootstrap loaded:', typeof bootstrap);
       
-      // Check if dropdowns can be manually triggered
+      // Test manual theme switching
       if (typeof bootstrap !== 'undefined' && bootstrap.Dropdown) {
         console.log('Bootstrap Dropdown available');
-        // Initialize dropdowns manually
-        const dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
-        const dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-          return new bootstrap.Dropdown(dropdownToggleEl);
-        });
-        console.log('Dropdowns initialized:', dropdownList.length);
       } else {
         console.error('Bootstrap Dropdown not available');
       }
+      
+      // Add manual theme switching for testing
+      setTimeout(() => {
+        console.log('Testing manual dark theme activation...');
+        document.body.setAttribute('data-bs-theme', 'dark');
+        document.body.classList.add('theme-dark');
+        document.documentElement.setAttribute('data-theme', 'dark');
+        console.log('Dark theme applied manually');
+      }, 2000);
       
       // Initialize the translation manager
       if (typeof TranslationManager !== 'undefined') {

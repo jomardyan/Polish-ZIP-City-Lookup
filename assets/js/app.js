@@ -63,20 +63,35 @@ $(document).ready(function() {
 
         // Initialize Bootstrap components
         initBootstrapComponents: function() {
+            // Check if Bootstrap is loaded
+            if (typeof bootstrap === 'undefined') {
+                console.error('Bootstrap is not loaded!');
+                return;
+            }
+
             // Initialize all Bootstrap tooltips
             $('[data-bs-toggle="tooltip"]').each(function() {
                 new bootstrap.Tooltip(this);
             });
 
-            // Initialize all Bootstrap dropdowns
+            // Initialize all Bootstrap dropdowns with explicit configuration
             $('.dropdown-toggle').each(function() {
-                new bootstrap.Dropdown(this);
+                try {
+                    new bootstrap.Dropdown(this, {
+                        boundary: 'viewport',
+                        display: 'dynamic'
+                    });
+                } catch (error) {
+                    console.warn('Failed to initialize dropdown:', error);
+                }
             });
 
             // Initialize all Bootstrap tabs
             $('[data-bs-toggle="tab"]').each(function() {
                 new bootstrap.Tab(this);
             });
+
+            console.log('Bootstrap components initialized successfully');
         },
 
         // Initialize theme system using Bootstrap and jQuery
@@ -111,16 +126,23 @@ $(document).ready(function() {
             localStorage.setItem('preferred-theme', theme);
             
             // Remove all theme classes
-            $('html').removeClass('theme-light theme-dark');
+            $('html').removeClass('theme-light theme-dark theme-auto');
+            $('body').removeClass('theme-light theme-dark theme-auto');
             
             if (theme === 'auto') {
                 this.applySystemTheme();
             } else {
+                // Apply theme classes to both html and body
                 $('html').addClass('theme-' + theme);
+                $('body').addClass('theme-' + theme);
                 $('body').attr('data-bs-theme', theme);
+                
+                // Update the document root for CSS custom properties
+                document.documentElement.setAttribute('data-theme', theme);
             }
             
             this.updateThemeDropdown(theme);
+            console.log('Theme set to:', theme);
         },
 
         // Apply system theme
@@ -128,8 +150,15 @@ $(document).ready(function() {
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const systemTheme = prefersDark ? 'dark' : 'light';
             
+            // Apply theme classes to both html and body
             $('html').addClass('theme-' + systemTheme);
+            $('body').addClass('theme-' + systemTheme);
             $('body').attr('data-bs-theme', systemTheme);
+            
+            // Update the document root for CSS custom properties
+            document.documentElement.setAttribute('data-theme', systemTheme);
+            
+            console.log('System theme applied:', systemTheme);
         },
 
         // Update theme dropdown

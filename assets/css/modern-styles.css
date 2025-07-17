@@ -29,7 +29,9 @@
 }
 
 /* Dark theme colors */
-[data-bs-theme="dark"] {
+[data-bs-theme="dark"],
+[data-theme="dark"],
+.theme-dark {
   --app-bg: #121212;
   --app-surface: #1e1e1e;
   --app-text: #ffffff;
@@ -536,6 +538,87 @@ h1, h2, h3, h4, h5, h6 {
 .dropdown-item:focus {
   outline: 2px solid var(--app-accent);
   outline-offset: 2px;
+}
+
+/* Dark theme specific overrides for better readability */
+[data-bs-theme="dark"] .navbar,
+[data-theme="dark"] .navbar,
+.theme-dark .navbar {
+  background-color: var(--app-surface) !important;
+  border-bottom-color: var(--app-border) !important;
+}
+
+[data-bs-theme="dark"] .navbar-brand,
+[data-bs-theme="dark"] .nav-link,
+[data-theme="dark"] .navbar-brand,
+[data-theme="dark"] .nav-link,
+.theme-dark .navbar-brand,
+.theme-dark .nav-link {
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-menu,
+[data-theme="dark"] .dropdown-menu,
+.theme-dark .dropdown-menu {
+  background-color: var(--app-surface) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-item,
+[data-theme="dark"] .dropdown-item,
+.theme-dark .dropdown-item {
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover,
+[data-theme="dark"] .dropdown-item:hover,
+.theme-dark .dropdown-item:hover {
+  background-color: var(--app-accent) !important;
+  color: white !important;
+}
+
+[data-bs-theme="dark"] .card,
+[data-theme="dark"] .card,
+.theme-dark .card {
+  background-color: var(--app-surface) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-theme="dark"] .form-control,
+.theme-dark .form-control {
+  background-color: var(--app-surface) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme="dark"] .form-control::placeholder,
+[data-theme="dark"] .form-control::placeholder,
+.theme-dark .form-control::placeholder {
+  color: var(--app-text-muted) !important;
+}
+
+[data-bs-theme="dark"] .bg-light,
+[data-theme="dark"] .bg-light,
+.theme-dark .bg-light {
+  background-color: var(--app-surface) !important;
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme="dark"] .text-muted,
+[data-theme="dark"] .text-muted,
+.theme-dark .text-muted {
+  color: var(--app-text-muted) !important;
+}
+
+[data-bs-theme="dark"] .input-group-text,
+[data-theme="dark"] .input-group-text,
+.theme-dark .input-group-text {
+  background-color: var(--app-accent) !important;
+  border-color: var(--app-accent) !important;
+  color: white !important;
 }
 
 /* Screen Reader Only */
