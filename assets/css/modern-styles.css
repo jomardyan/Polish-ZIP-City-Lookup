@@ -621,6 +621,54 @@ h1, h2, h3, h4, h5, h6 {
   color: white !important;
 }
 
+/* Additional dark theme improvements for better contrast */
+[data-bs-theme="dark"] .card-body,
+[data-theme="dark"] .card-body,
+.theme-dark .card-body {
+  background-color: var(--app-surface) !important;
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme="dark"] .btn-outline-primary,
+[data-theme="dark"] .btn-outline-primary,
+.theme-dark .btn-outline-primary {
+  border-color: var(--app-accent) !important;
+  color: var(--app-accent) !important;
+}
+
+[data-bs-theme="dark"] .btn-outline-primary:hover,
+[data-theme="dark"] .btn-outline-primary:hover,
+.theme-dark .btn-outline-primary:hover {
+  background-color: var(--app-accent) !important;
+  color: white !important;
+}
+
+[data-bs-theme="dark"] .btn-outline-secondary,
+[data-theme="dark"] .btn-outline-secondary,
+.theme-dark .btn-outline-secondary {
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme="dark"] .btn-outline-secondary:hover,
+[data-theme="dark"] .btn-outline-secondary:hover,
+.theme-dark .btn-outline-secondary:hover {
+  background-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+}
+
+[data-bs-theme="dark"] .small,
+[data-theme="dark"] .small,
+.theme-dark .small {
+  color: var(--app-text-muted) !important;
+}
+
+[data-bs-theme="dark"] .fw-bold,
+[data-theme="dark"] .fw-bold,
+.theme-dark .fw-bold {
+  color: var(--app-text) !important;
+}
+
 /* Screen Reader Only */
 .sr-only {
   position: absolute;

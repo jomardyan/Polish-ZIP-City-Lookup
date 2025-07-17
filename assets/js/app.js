@@ -102,12 +102,19 @@ $(document).ready(function() {
             const savedTheme = localStorage.getItem('preferred-theme') || 'auto';
             this.setTheme(savedTheme);
             
-            // Handle theme dropdown clicks
-            $('.theme-option').on('click', function(e) {
+            // Handle theme dropdown clicks using event delegation
+            $(document).on('click', '.theme-option', function(e) {
                 e.preventDefault();
                 const theme = $(this).data('theme');
+                console.log('Theme option clicked:', theme);
                 self.setTheme(theme);
                 self.updateThemeDropdown(theme);
+                
+                // Close the dropdown after selection
+                const dropdown = bootstrap.Dropdown.getInstance(document.getElementById('themeDropdown'));
+                if (dropdown) {
+                    dropdown.hide();
+                }
             });
 
             // Listen for system theme changes

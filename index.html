@@ -1216,15 +1216,6 @@
         console.error('Bootstrap Dropdown not available');
       }
       
-      // Add manual theme switching for testing
-      setTimeout(() => {
-        console.log('Testing manual dark theme activation...');
-        document.body.setAttribute('data-bs-theme', 'dark');
-        document.body.classList.add('theme-dark');
-        document.documentElement.setAttribute('data-theme', 'dark');
-        console.log('Dark theme applied manually');
-      }, 2000);
-      
       // Initialize the translation manager
       if (typeof TranslationManager !== 'undefined') {
         window.translationManager = new TranslationManager();
