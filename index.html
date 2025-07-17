@@ -3,18 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Enhanced Polish ZIP & City Lookup - A powerful, user-friendly web application for looking up Polish postal ZIP codes and cities with advanced features" />
-  <meta name="keywords" content="postal codes, zip codes, poland, lookup, cities, batch processing, maps, geocoding" />
+  
+  <!-- Primary Meta Tags -->
+  <title>Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool</title>
+  <meta name="title" content="Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool" />
+  <meta name="description" content="Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, search history, and multilingual support. Find ZIP codes and cities in Poland instantly." />
+  <meta name="keywords" content="polish postal codes, kod pocztowy polska, zip codes poland, city lookup poland, miejscowość polska, batch processing, interactive maps, geocoding, postal services" />
   <meta name="author" content="Hayk Jomardyan" />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="Polish ZIP & City Lookup" />
-  <meta property="og:description" content="Enhanced Polish ZIP & City Lookup with batch processing and interactive maps" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="language" content="English, Polish, German, French, Spanish, Italian, Dutch, Russian, Chinese" />
+  <meta name="geo.region" content="PL" />
+  <meta name="geo.country" content="Poland" />
+  <meta name="theme-color" content="#007bff" />
+  
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <title>Enhanced Polish ZIP & City Lookup</title>
+  <meta property="og:url" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/" />
+  <meta property="og:title" content="Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool" />
+  <meta property="og:description" content="Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, and multilingual support. Find ZIP codes and cities in Poland instantly." />
+  <meta property="og:image" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/assets/images/og-image.png" />
+  <meta property="og:site_name" content="Polish ZIP & City Lookup" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="pl_PL" />
+  <meta property="og:locale:alternate" content="de_DE" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/" />
+  <meta property="twitter:title" content="Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool" />
+  <meta property="twitter:description" content="Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, and multilingual support." />
+  <meta property="twitter:image" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/assets/images/twitter-image.png" />
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://jomardyan.github.io/Polish-ZIP-City-Lookup/" />
+  
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png" />
+  <link rel="manifest" href="assets/manifest.json" />
   
   <!-- Preload critical resources -->
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" as="style" />
   <link rel="preload" href="assets/css/styles.css" as="style" />
+  <link rel="preload" href="assets/js/vanilla-app.js" as="script" />
+  
+  <!-- DNS Prefetch for external resources -->
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+  <link rel="dns-prefetch" href="//unpkg.com" />
   
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
@@ -24,6 +61,32 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <!-- Custom CSS -->
   <link rel="stylesheet" href="assets/css/styles.css" />
+  
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Polish ZIP Code & City Lookup",
+    "description": "Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, and multilingual support",
+    "url": "https://jomardyan.github.io/Polish-ZIP-City-Lookup/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Hayk Jomardyan"
+    },
+    "inLanguage": ["en", "pl", "de", "fr", "es", "it", "nl", "ru", "zh"],
+    "keywords": "polish postal codes, kod pocztowy polska, zip codes poland, city lookup poland",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "screenshot": "https://jomardyan.github.io/Polish-ZIP-City-Lookup/assets/images/app-screenshot.png"
+  }
+  </script>
 </head>
 <body>
   <div id="app">
@@ -38,33 +101,48 @@
     </div>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
-      <a class="navbar-brand" href="#" aria-label="Home">
-        📮 <span data-i18n="brand">Enhanced Polish ZIP & City Lookup</span>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm" role="navigation" aria-label="Main navigation">
+      <a class="navbar-brand d-flex align-items-center" href="#" aria-label="Polish ZIP & City Lookup - Home">
+        <span class="navbar-brand-icon me-2" role="img" aria-label="Mail icon">📮</span>
+        <span data-i18n="brandShort">Polish ZIP Lookup</span>
       </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navMenu" 
+              aria-controls="navMenu" aria-expanded="false" aria-label="Toggle main navigation menu">
         <span class="navbar-toggler-icon"></span>
       </button>
+      
       <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="#" data-tab="single" role="tab" aria-selected="true">
-              <i class="bi bi-search"></i> <span data-i18n="lookup">Lookup</span>
+        <ul class="navbar-nav mr-auto" role="tablist" aria-label="Application sections">
+          <li class="nav-item" role="none">
+            <a class="nav-link active" href="#" data-tab="single" role="tab" 
+               aria-selected="true" aria-controls="singleTab" id="singleTabLink"
+               title="Single ZIP code or city lookup">
+              <i class="bi bi-search" aria-hidden="true"></i> 
+              <span data-i18n="lookup">Lookup</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-tab="batch" role="tab" aria-selected="false">
-              <i class="bi bi-list-ul"></i> <span data-i18n="batch">Batch</span>
+          <li class="nav-item" role="none">
+            <a class="nav-link" href="#" data-tab="batch" role="tab" 
+               aria-selected="false" aria-controls="batchTab" id="batchTabLink"
+               title="Process multiple ZIP codes or cities at once">
+              <i class="bi bi-list-ul" aria-hidden="true"></i> 
+              <span data-i18n="batch">Batch</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-tab="history" role="tab" aria-selected="false">
-              <i class="bi bi-clock-history"></i> <span data-i18n="history">History</span>
+          <li class="nav-item" role="none">
+            <a class="nav-link" href="#" data-tab="history" role="tab" 
+               aria-selected="false" aria-controls="historyTab" id="historyTabLink"
+               title="View search history and favorites">
+              <i class="bi bi-clock-history" aria-hidden="true"></i> 
+              <span data-i18n="history">History</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-tab="settings" role="tab" aria-selected="false">
-              <i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span>
+          <li class="nav-item" role="none">
+            <a class="nav-link" href="#" data-tab="settings" role="tab" 
+               aria-selected="false" aria-controls="settingsTab" id="settingsTabLink"
+               title="Customize application settings and preferences">
+              <i class="bi bi-gear" aria-hidden="true"></i> 
+              <span data-i18n="settings">Settings</span>
             </a>
           </li>
         </ul>
@@ -85,6 +163,12 @@
               <a class="dropdown-item" href="#" data-locale="en">🇺🇸 English</a>
               <a class="dropdown-item" href="#" data-locale="pl">🇵🇱 Polski</a>
               <a class="dropdown-item" href="#" data-locale="de">🇩🇪 Deutsch</a>
+              <a class="dropdown-item" href="#" data-locale="fr">🇫🇷 Français</a>
+              <a class="dropdown-item" href="#" data-locale="es">🇪🇸 Español</a>
+              <a class="dropdown-item" href="#" data-locale="it">🇮🇹 Italiano</a>
+              <a class="dropdown-item" href="#" data-locale="nl">🇳🇱 Nederlands</a>
+              <a class="dropdown-item" href="#" data-locale="ru">🇷🇺 Русский</a>
+              <a class="dropdown-item" href="#" data-locale="zh">🇨🇳 中文</a>
             </div>
           </li>
           <!-- Theme Toggle -->
@@ -580,6 +664,12 @@
                     <option value="en">🇺🇸 English</option>
                     <option value="pl">🇵🇱 Polski</option>
                     <option value="de">🇩🇪 Deutsch</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="it">🇮🇹 Italiano</option>
+                    <option value="nl">🇳🇱 Nederlands</option>
+                    <option value="ru">🇷🇺 Русский</option>
+                    <option value="zh">🇨🇳 中文</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -785,7 +875,28 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
+  <!-- Translation System -->
+  <script src="assets/js/translations/manager.js"></script>
+  <script src="assets/js/translations/en.js"></script>
+  <script src="assets/js/translations/pl.js"></script>
+  <script src="assets/js/translations/de.js"></script>
+  <script src="assets/js/translations/fr.js"></script>
+  <script src="assets/js/translations/es.js"></script>
+  <script src="assets/js/translations/it.js"></script>
+  <script src="assets/js/translations/nl.js"></script>
+  <script src="assets/js/translations/ru.js"></script>
+  <script src="assets/js/translations/zh.js"></script>
+  
   <!-- Custom Application Script -->
   <script src="assets/js/vanilla-app.js"></script>
+  
+  <!-- Initialize Translation Manager -->
+  <script>
+    // Initialize the translation manager when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      window.translationManager = new TranslationManager();
+      window.translationManager.autoDetectLanguage();
+    });
+  </script>
 </body>
 </html>

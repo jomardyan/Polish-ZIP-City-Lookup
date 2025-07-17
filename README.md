@@ -1,4 +1,4 @@
-# Enhanced Polish ZIP & City Lookup 📮
+# Polish ZIP & City Lookup 📮
 ![License](https://img.shields.io/github/license/jomardyan/Polish-ZIP-City-Lookup)
 ![Last Commit](https://img.shields.io/github/last-commit/jomardyan/Polish-ZIP-City-Lookup)
 ![Repo Size](https://img.shields.io/github/repo-size/jomardyan/Polish-ZIP-City-Lookup)

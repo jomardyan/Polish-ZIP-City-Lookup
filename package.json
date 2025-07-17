@@ -24,7 +24,7 @@
     "responsive"
   ],
   "author": "Hayk Jomardyan",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "devDependencies": {
     "eslint": "^8.57.0",
     "http-server": "^14.1.1",
