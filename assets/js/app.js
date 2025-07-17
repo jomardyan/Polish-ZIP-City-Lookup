@@ -919,11 +919,27 @@ $(document).ready(function() {
 
         // Switch between tabs
         switchTab: function(tabName) {
-            // Hide all tab contents
-            $('[data-tab-content]').hide();
+            console.log('switchTab called with:', tabName);
+            console.log('Available tab contents:', $('[data-tab-content]').length);
+            
+            // Hide all tab contents using CSS display property
+            $('[data-tab-content]').each(function() {
+                $(this).css({
+                    'display': 'none',
+                    'visibility': 'hidden'
+                });
+            });
             
             // Show selected tab content
-            $(`[data-tab-content="${tabName}"]`).show();
+            const $targetTab = $(`[data-tab-content="${tabName}"]`);
+            console.log('Target tab element found:', $targetTab.length > 0);
+            if ($targetTab.length > 0) {
+                $targetTab.css({
+                    'display': 'block',
+                    'visibility': 'visible'
+                });
+                console.log('Showed tab:', tabName);
+            }
             
             // Update navigation
             $('[data-tab]').removeClass('active');
@@ -931,6 +947,8 @@ $(document).ready(function() {
             
             this.state.activeTab = tabName;
             this.onTabChange(tabName);
+            
+            console.log('Tab switched to:', tabName, 'Active tab state:', this.state.activeTab);
         },
 
         // Set loading state
