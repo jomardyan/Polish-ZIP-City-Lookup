@@ -605,21 +605,72 @@
               </span>
             </li>
             
-            <!-- Simplified Language Dropdown -->
-            <li class="nav-item me-2">
+            <!-- Language Dropdown -->
+            <li class="nav-item dropdown me-2">
               <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="langDropdown" 
+                 role="button" data-bs-toggle="dropdown" aria-expanded="false"
                  title="Select application language">
                 <span id="currentLangFlag">🇺🇸</span>
                 <span id="currentLangCode" class="ms-1">EN</span>
               </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                <li><h6 class="dropdown-header">🌐 Select Language</h6></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="en">
+                  <span>🇺🇸</span> <span class="fw-semibold">English</span> <span class="text-muted">(EN)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="pl">
+                  <span>🇵🇱</span> <span class="fw-semibold">Polski</span> <span class="text-muted">(PL)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="de">
+                  <span>🇩🇪</span> <span class="fw-semibold">Deutsch</span> <span class="text-muted">(DE)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="fr">
+                  <span>🇫🇷</span> <span class="fw-semibold">Français</span> <span class="text-muted">(FR)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="es">
+                  <span>🇪🇸</span> <span class="fw-semibold">Español</span> <span class="text-muted">(ES)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="it">
+                  <span>🇮🇹</span> <span class="fw-semibold">Italiano</span> <span class="text-muted">(IT)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="nl">
+                  <span>🇳🇱</span> <span class="fw-semibold">Nederlands</span> <span class="text-muted">(NL)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="ru">
+                  <span>🇷🇺</span> <span class="fw-semibold">Русский</span> <span class="text-muted">(RU)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="zh">
+                  <span>🇨🇳</span> <span class="fw-semibold">中文</span> <span class="text-muted">(ZH)</span>
+                </a></li>
+              </ul>
             </li>
             
-            <!-- Simplified Theme Dropdown -->
-            <li class="nav-item">
+            <!-- Theme Dropdown -->
+            <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="themeDropdown" 
+                 role="button" data-bs-toggle="dropdown" aria-expanded="false"
                  title="Switch theme">
+                <i class="bi bi-circle-half me-1"></i>
                 <span class="ms-1">Auto</span>
               </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+                <li><h6 class="dropdown-header">🎨 Select Theme</h6></li>
+                <li><a class="dropdown-item theme-option" href="#" data-theme="light">
+                  <i class="bi bi-sun-fill me-2"></i>
+                  <span class="fw-semibold">Light</span>
+                  <i class="bi bi-check theme-check ms-auto" style="display: none;"></i>
+                </a></li>
+                <li><a class="dropdown-item theme-option" href="#" data-theme="dark">
+                  <i class="bi bi-moon-fill me-2"></i>
+                  <span class="fw-semibold">Dark</span>
+                  <i class="bi bi-check theme-check ms-auto" style="display: none;"></i>
+                </a></li>
+                <li><a class="dropdown-item theme-option active" href="#" data-theme="auto">
+                  <i class="bi bi-circle-half me-2"></i>
+                  <span class="fw-semibold">Auto</span>
+                  <i class="bi bi-check theme-check ms-auto" style="display: inline;"></i>
+                </a></li>
+              </ul>
             </li>
           </ul>
         </div>
