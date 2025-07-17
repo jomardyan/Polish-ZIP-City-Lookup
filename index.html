@@ -1208,16 +1208,11 @@
     $(document).ready(function() {
       console.log('jQuery loaded:', typeof $);
       console.log('Bootstrap loaded:', typeof bootstrap);
+      console.log('PolishZipApp loaded:', typeof PolishZipApp);
       
-      // Check if dropdowns can be manually triggered
+      // Test manual theme switching
       if (typeof bootstrap !== 'undefined' && bootstrap.Dropdown) {
         console.log('Bootstrap Dropdown available');
-        // Initialize dropdowns manually
-        const dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
-        const dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-          return new bootstrap.Dropdown(dropdownToggleEl);
-        });
-        console.log('Dropdowns initialized:', dropdownList.length);
       } else {
         console.error('Bootstrap Dropdown not available');
       }
