@@ -1,5 +1,14 @@
 // Test setup file
 // Mock DOM APIs that may not be available in jsdom
+
+// Add TextEncoder/TextDecoder polyfills for Node.js environment
+const { TextEncoder, TextDecoder } = require('util');
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
+// Mock browser APIs
+global.confirm = jest.fn().mockReturnValue(true);
+global.alert = jest.fn();
 Object.defineProperty(window, 'localStorage', {
   value: {
     getItem: jest.fn(),

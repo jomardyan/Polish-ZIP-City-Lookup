@@ -22,12 +22,6 @@
     "no-var": "error"
   },
   "globals": {
-    "L": "readonly",
-    "Vue": "readonly",
-    "VueI18n": "readonly",
-    "axios": "readonly",
-    "Papa": "readonly",
-    "XLSX": "readonly",
-    "saveAs": "readonly"
+    "L": "readonly"
   }
 }

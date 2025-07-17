@@ -1,69 +1,366 @@
-// Simple tests for the Polish ZIP & City Lookup application
-describe('Polish ZIP & City Lookup', () => {
+/**
+ * Test suite for Enhanced Polish ZIP & City Lookup
+ */
+
+// Mock DOM environment
+const { JSDOM } = require('jsdom');
+const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
+  url: 'http://localhost',
+  pretendToBeVisual: true,
+  resources: 'usable'
+});
+
+global.window = dom.window;
+global.document = dom.window.document;
+global.navigator = dom.window.navigator;
+global.localStorage = dom.window.localStorage;
+
+// Mock fetch for API calls
+global.fetch = jest.fn();
+
+// Mock L (Leaflet) for map functionality
+global.L = {
+  map: jest.fn(() => ({
+    setView: jest.fn().mockReturnThis(),
+    addTo: jest.fn().mockReturnThis(),
+    fitBounds: jest.fn().mockReturnThis(),
+    removeLayer: jest.fn()
+  })),
+  tileLayer: jest.fn(() => ({
+    addTo: jest.fn().mockReturnThis()
+  })),
+  marker: jest.fn(() => ({
+    addTo: jest.fn().mockReturnThis(),
+    bindPopup: jest.fn().mockReturnThis()
+  })),
+  featureGroup: jest.fn(() => ({
+    getBounds: jest.fn(() => ({
+      pad: jest.fn().mockReturnThis()
+    }))
+  }))
+};
+
+// Load the application
+const fs = require('fs');
+const path = require('path');
+
+// Read and eval the main application file
+const appCode = fs.readFileSync(
+  path.join(__dirname, '../assets/js/vanilla-app.js'),
+  'utf8'
+);
+
+// Create a safe eval environment
+const vm = require('vm');
+const context = vm.createContext({
+  console,
+  setTimeout,
+  clearTimeout,
+  setInterval,
+  clearInterval,
+  document: global.document,
+  window: global.window,
+  localStorage: global.localStorage,
+  fetch: global.fetch,
+  L: global.L,
+  navigator: global.navigator,
+  confirm: jest.fn().mockReturnValue(true),
+  alert: jest.fn(),
+  URL: global.URL || class URL {
+    constructor(url) {
+      this.searchParams = {
+        set: jest.fn()
+      };
+    }
+  }
+});
+
+// Execute the app code in the context
+vm.runInContext(appCode, context);
+
+// Since the app code defines PolishZipLookup as a class but doesn't attach it to global scope
+// we need to evaluate it manually in the context
+const PolishZipLookup = vm.runInContext('PolishZipLookup', context);
+
+describe('Enhanced Polish ZIP & City Lookup', () => {
   let app;
 
   beforeEach(() => {
-    // Setup DOM
+    // Reset DOM
     document.body.innerHTML = `
       <div id="app">
-        <div data-tab-content="single">Single tab content</div>
-        <div data-tab-content="batch">Batch tab content</div>
+        <div data-tab-content="single" style="display: block;">Single tab content</div>
+        <div data-tab-content="batch" style="display: none;">Batch tab content</div>
+        <div data-tab-content="history" style="display: none;">History tab content</div>
+        <div data-tab-content="settings" style="display: none;">Settings tab content</div>
         <div id="alertContainer"></div>
+        <div id="map"></div>
         <span data-i18n="brand">Test</span>
+        <input id="zipInput" />
+        <input id="cityInput" />
+        <textarea id="batchTextarea"></textarea>
+        <div id="historyList"></div>
+        <div id="favoritesList"></div>
+        <span id="totalSearches">0</span>
+        <span id="totalSearchesStat">0</span>
+        <span id="todaySearchesStat">0</span>
+        <span id="favoritesStat">0</span>
+        <span id="memberSince">-</span>
+        <div id="inputCounter">0</div>
       </div>
     `;
+    
+    // Clear localStorage
+    localStorage.clear();
+    
+    // Reset fetch mock
+    fetch.mockClear();
     
     // Initialize app
     app = new PolishZipLookup();
   });
 
-  test('should initialize with default state', () => {
-    expect(app.state.activeTab).toBe('single');
-    expect(app.state.locale).toBe('en');
-    expect(app.state.theme).toBe('light');
+  describe('Initialization', () => {
+    test('should initialize with default state', () => {
+      expect(app.state.activeTab).toBe('single');
+      expect(app.state.locale).toBe('en');
+      expect(app.state.theme).toBe('light');
+      expect(app.state.history).toEqual([]);
+      expect(app.state.favorites).toEqual([]);
+    });
+
+    test('should initialize with default settings', () => {
+      expect(app.state.settings.theme).toBe('light');
+      expect(app.state.settings.language).toBe('en');
+      expect(app.state.settings.saveHistory).toBe(true);
+      expect(app.state.settings.maxResults).toBe(50);
+    });
   });
 
-  test('should validate ZIP codes correctly', () => {
-    expect(app.validateZip('00-001')).toBe(true);
-    expect(app.validateZip('00001')).toBe(true);
-    expect(app.validateZip('invalid')).toBe(false);
-    expect(app.validateZip('12345')).toBe(true);
-    expect(app.validateZip('12-345')).toBe(true);
+  describe('Validation', () => {
+    test('should validate ZIP codes correctly', () => {
+      expect(app.validateZip('00-001')).toBe(true);
+      expect(app.validateZip('00001')).toBe(true);
+      expect(app.validateZip('12-345')).toBe(true);
+      expect(app.validateZip('invalid')).toBe(false);
+      expect(app.validateZip('123')).toBe(false);
+      expect(app.validateZip('123456')).toBe(false);
+    });
+
+    test('should normalize ZIP codes', () => {
+      expect(app.normalizeZip('00001')).toBe('00-001');
+      expect(app.normalizeZip('00-001')).toBe('00-001');
+      expect(app.normalizeZip('12345')).toBe('12-345');
+    });
+
+    test('should detect input type correctly', () => {
+      expect(app.detectInputType('00-001')).toBe('zip');
+      expect(app.detectInputType('00001')).toBe('zip');
+      expect(app.detectInputType('Warszawa')).toBe('city');
+      expect(app.detectInputType('invalid123')).toBe('city');
+    });
   });
 
-  test('should normalize ZIP codes', () => {
-    expect(app.normalizeZip('00001')).toBe('00-001');
-    expect(app.normalizeZip('00-001')).toBe('00-001');
+  describe('Internationalization', () => {
+    test('should translate text correctly', () => {
+      expect(app.t('brand')).toBe('Enhanced Polish ZIP & City Lookup');
+      
+      app.state.locale = 'pl';
+      expect(app.t('brand')).toBe('Rozszerzona Wyszukiwarka Kodów Pocztowych');
+      
+      app.state.locale = 'de';
+      expect(app.t('brand')).toBe('Erweiterte polnische PLZ & Stadt Suche');
+    });
+
+    test('should return key if translation not found', () => {
+      expect(app.t('nonexistent')).toBe('nonexistent');
+    });
   });
 
-  test('should translate text correctly', () => {
-    expect(app.t('brand')).toBe('Polish ZIP & City Lookup');
-    
-    app.state.locale = 'pl';
-    expect(app.t('brand')).toBe('Wyszukiwarka Kodów Pocztowych i Miast');
+  describe('UI Management', () => {
+    test('should switch tabs correctly', () => {
+      app.state.activeTab = 'batch';
+      app.updateUI();
+      
+      const singleTab = document.querySelector('[data-tab-content="single"]');
+      const batchTab = document.querySelector('[data-tab-content="batch"]');
+      
+      expect(singleTab.style.display).toBe('none');
+      expect(batchTab.style.display).toBe('block');
+    });
+
+    test('should update input counter', () => {
+      const testData = 'line1\nline2\nline3';
+      app.updateInputCounter(testData);
+      
+      const counter = document.getElementById('inputCounter');
+      expect(counter.textContent).toBe('3');
+    });
+
+    test('should show alerts correctly', () => {
+      app.showSuccess('Test success message');
+      
+      const alertContainer = document.getElementById('alertContainer');
+      expect(alertContainer.children.length).toBe(1);
+      expect(alertContainer.children[0].className).toContain('alert-success');
+    });
+
+    test('should show error alerts correctly', () => {
+      app.showError('Test error message');
+      
+      const alertContainer = document.getElementById('alertContainer');
+      expect(alertContainer.children.length).toBe(1);
+      expect(alertContainer.children[0].className).toContain('alert-danger');
+    });
   });
 
-  test('should switch tabs correctly', () => {
-    app.state.activeTab = 'batch';
-    app.updateUI();
-    
-    const singleTab = document.querySelector('[data-tab-content="single"]');
-    const batchTab = document.querySelector('[data-tab-content="batch"]');
-    
-    expect(singleTab.style.display).toBe('none');
-    expect(batchTab.style.display).toBe('block');
+  describe('History Management', () => {
+    test('should add entries to history', () => {
+      app.addToHistory('00-001', ['Warszawa'], 'zip');
+      
+      expect(app.state.history.length).toBe(1);
+      expect(app.state.history[0].input).toBe('00-001');
+      expect(app.state.history[0].output).toEqual(['Warszawa']);
+      expect(app.state.history[0].type).toBe('zip');
+    });
+
+    test('should not add to history if setting disabled', () => {
+      app.state.settings.saveHistory = false;
+      app.addToHistory('00-001', ['Warszawa'], 'zip');
+      
+      expect(app.state.history.length).toBe(0);
+    });
+
+    test('should toggle favorites correctly', () => {
+      app.addToHistory('00-001', ['Warszawa'], 'zip');
+      const historyId = app.state.history[0].id;
+      
+      app.toggleFavorite(historyId);
+      
+      expect(app.state.history[0].favorite).toBe(true);
+      expect(app.state.favorites.length).toBe(1);
+      
+      app.toggleFavorite(historyId);
+      
+      expect(app.state.history[0].favorite).toBe(false);
+      expect(app.state.favorites.length).toBe(0);
+    });
   });
 
-  test('should show alerts correctly', () => {
-    app.showSuccess('Test message');
-    
-    const alertContainer = document.getElementById('alertContainer');
-    expect(alertContainer.children.length).toBe(1);
-    expect(alertContainer.children[0].className).toContain('alert-success');
+  describe('Settings Management', () => {
+    test('should load and save preferences', () => {
+      const testSettings = { theme: 'dark', language: 'pl' };
+      localStorage.setItem('zipLookupSettings', JSON.stringify(testSettings));
+      
+      app.loadPreferences();
+      
+      expect(app.state.settings.theme).toBe('dark');
+      expect(app.state.settings.language).toBe('pl');
+    });
+
+    test('should reset settings to defaults', () => {
+      app.state.settings.theme = 'dark';
+      app.resetSettings();
+      
+      expect(app.state.settings.theme).toBe('light');
+    });
+  });
+
+  describe('Utility Functions', () => {
+    test('should swap inputs correctly', () => {
+      const zipInput = document.getElementById('zipInput');
+      const cityInput = document.getElementById('cityInput');
+      
+      zipInput.value = '00-001';
+      cityInput.value = 'Warszawa';
+      
+      app.swapInputs();
+      
+      expect(zipInput.value).toBe('Warszawa');
+      expect(cityInput.value).toBe('00-001');
+    });
+
+    test('should load sample data correctly', () => {
+      const textarea = document.getElementById('batchTextarea');
+      
+      app.loadSampleData('zips');
+      expect(textarea.value).toContain('00-001');
+      
+      app.loadSampleData('cities');
+      expect(textarea.value).toContain('Warszawa');
+    });
+
+    test('should update statistics correctly', () => {
+      app.addToHistory('00-001', ['Warszawa'], 'zip');
+      app.addToHistory('Kraków', ['31-008'], 'city');
+      app.toggleFavorite(app.state.history[0].id);
+      
+      app.updateStats();
+      
+      const totalElement = document.getElementById('totalSearchesStat');
+      const favoritesElement = document.getElementById('favoritesStat');
+      
+      expect(totalElement.textContent).toBe('2');
+      expect(favoritesElement.textContent).toBe('1');
+    });
+  });
+
+  describe('Data Export', () => {
+    test('should generate results table HTML', () => {
+      app.state.results = [
+        { input: '00-001', output: ['Warszawa'] },
+        { input: 'Kraków', output: ['31-008', '31-009'] }
+      ];
+      
+      const html = app.generateResultsTableHTML();
+      
+      expect(html).toContain('00-001');
+      expect(html).toContain('Warszawa');
+      expect(html).toContain('Kraków');
+      expect(html).toContain('31-008, 31-009');
+    });
+
+    test('should generate printable results', () => {
+      app.state.results = [
+        { input: '00-001', output: ['Warszawa'] }
+      ];
+      
+      const html = app.generatePrintableResults();
+      
+      expect(html).toContain('<table>');
+      expect(html).toContain('00-001');
+      expect(html).toContain('Warszawa');
+    });
+  });
+
+  describe('Error Handling', () => {
+    test('should handle invalid ZIP format', () => {
+      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+      
+      // This should not throw
+      expect(() => {
+        app.validateZip('invalid');
+      }).not.toThrow();
+      
+      consoleSpy.mockRestore();
+    });
+
+    test('should handle localStorage errors gracefully', () => {
+      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+      
+      // Mock localStorage to throw
+      const originalSetItem = localStorage.setItem;
+      localStorage.setItem = jest.fn(() => {
+        throw new Error('Storage full');
+      });
+      
+      // This should not throw
+      expect(() => {
+        app.savePreferences();
+      }).not.toThrow();
+      
+      localStorage.setItem = originalSetItem;
+      consoleSpy.mockRestore();
+    });
   });
 });
-
-// Export for testing
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { PolishZipLookup };
-}

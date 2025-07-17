@@ -3,42 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A lightweight, user-friendly web application for looking up Polish postal ZIP codes and cities" />
-  <meta name="keywords" content="postal codes, zip codes, poland, lookup, cities" />
+  <meta name="description" content="Enhanced Polish ZIP & City Lookup - A powerful, user-friendly web application for looking up Polish postal ZIP codes and cities with advanced features" />
+  <meta name="keywords" content="postal codes, zip codes, poland, lookup, cities, batch processing, maps, geocoding" />
   <meta name="author" content="Hayk Jomardyan" />
-  <title>Polish ZIP & City Lookup</title>
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Polish ZIP & City Lookup" />
+  <meta property="og:description" content="Enhanced Polish ZIP & City Lookup with batch processing and interactive maps" />
+  <meta property="og:type" content="website" />
+  <title>Enhanced Polish ZIP & City Lookup</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" as="style" />
+  <link rel="preload" href="assets/css/styles.css" as="style" />
   
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <!-- Custom CSS -->
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
   <div id="app">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="d-flex justify-content-center align-items-center position-fixed w-100 h-100" style="top: 0; left: 0; background: rgba(255,255,255,0.9); z-index: 9999; display: none !important;">
+      <div class="text-center">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <p class="mb-0" data-i18n="loading">Loading application...</p>
+      </div>
+    </div>
+
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#" aria-label="Home">📮 <span data-i18n="brand">Polish ZIP & City Lookup</span></a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
+      <a class="navbar-brand" href="#" aria-label="Home">
+        📮 <span data-i18n="brand">Enhanced Polish ZIP & City Lookup</span>
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#" data-tab="single">
+            <a class="nav-link active" href="#" data-tab="single" role="tab" aria-selected="true">
               <i class="bi bi-search"></i> <span data-i18n="lookup">Lookup</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" data-tab="batch">
+            <a class="nav-link" href="#" data-tab="batch" role="tab" aria-selected="false">
               <i class="bi bi-list-ul"></i> <span data-i18n="batch">Batch</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-tab="history" role="tab" aria-selected="false">
+              <i class="bi bi-clock-history"></i> <span data-i18n="history">History</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-tab="settings" role="tab" aria-selected="false">
+              <i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span>
             </a>
           </li>
         </ul>
         <ul class="navbar-nav">
+          <!-- Quick Stats -->
+          <li class="nav-item d-none d-lg-block">
+            <span class="navbar-text small">
+              <i class="bi bi-graph-up"></i> 
+              <span data-i18n="totalSearches">Searches</span>: <span id="totalSearches">0</span>
+            </span>
+          </li>
+          <!-- Language Dropdown -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="bi bi-translate"></i> EN
@@ -46,29 +84,55 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="langDropdown">
               <a class="dropdown-item" href="#" data-locale="en">🇺🇸 English</a>
               <a class="dropdown-item" href="#" data-locale="pl">🇵🇱 Polski</a>
+              <a class="dropdown-item" href="#" data-locale="de">🇩🇪 Deutsch</a>
             </div>
           </li>
+          <!-- Theme Toggle -->
           <li class="nav-item">
-            <a class="nav-link" href="#" id="themeToggle">
+            <a class="nav-link" href="#" id="themeToggle" title="Toggle theme">
               <i class="bi bi-moon"></i>
+            </a>
+          </li>
+          <!-- Fullscreen Toggle -->
+          <li class="nav-item d-none d-md-block">
+            <a class="nav-link" href="#" id="fullscreenToggle" title="Toggle fullscreen">
+              <i class="bi bi-fullscreen"></i>
             </a>
           </li>
         </ul>
       </div>
     </nav>
 
-    <div class="container py-4">
+    <div class="container-fluid py-4">
       <!-- Alerts -->
       <div id="alertContainer"></div>
 
+      <!-- Progress Bar -->
+      <div id="progressContainer" class="mb-3" style="display: none;">
+        <div class="progress">
+          <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <span class="sr-only">Progress</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Single Lookup -->
-      <div data-tab-content="single">
+      <div data-tab-content="single" role="tabpanel" aria-labelledby="single-tab">
+        <div class="row mb-4">
+          <div class="col-12">
+            <h4 class="mb-3"><i class="bi bi-search"></i> <span data-i18n="singleLookup">Single Lookup</span></h4>
+            <p class="text-muted" data-i18n="singleLookupDesc">Enter a ZIP code to find its city, or a city name to find postal codes.</p>
+          </div>
+        </div>
+        
         <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="zipInput" class="sr-only" data-i18n="zipPlaceholder">ZIP Code</label>
+          <div class="col-lg-6 mb-3">
+            <label for="zipInput" class="form-label font-weight-bold">
+              <i class="bi bi-envelope-fill text-primary"></i> <span data-i18n="zipCode">ZIP Code</span>
+            </label>
             <div class="input-group">
               <div class="input-group-prepend">
-                <span class="input-group-text">
+                <span class="input-group-text bg-primary text-white">
                   <i class="bi bi-envelope" aria-hidden="true"></i>
                 </span>
               </div>
@@ -80,30 +144,37 @@
                 placeholder="00-001 or 00001"
                 autofocus 
                 autocomplete="postal-code"
+                maxlength="6"
+                pattern="^\d{2}-?\d{3}$"
               />
               <div class="input-group-append">
                 <button 
                   id="zipLookupBtn"
                   class="btn btn-primary" 
                   data-loading="lookupCity"
+                  title="Lookup city for this ZIP code"
                 >
                   <span data-i18n="lookupCity">Lookup City</span>
                 </button>
                 <button 
                   id="clearZipBtn"
                   class="btn btn-outline-secondary" 
-                  title="Clear"
+                  title="Clear ZIP input"
                 >
                   <i class="bi bi-x-circle" aria-hidden="true"></i>
                 </button>
               </div>
             </div>
+            <div class="form-text" data-i18n="zipHelp">Format: 00-001 or 00001</div>
           </div>
-          <div class="col-md-6 mb-3">
-            <label for="cityInput" class="sr-only" data-i18n="cityPlaceholder">City Name</label>
+          
+          <div class="col-lg-6 mb-3">
+            <label for="cityInput" class="form-label font-weight-bold">
+              <i class="bi bi-geo-alt-fill text-success"></i> <span data-i18n="cityName">City Name</span>
+            </label>
             <div class="input-group">
               <div class="input-group-prepend">
-                <span class="input-group-text">
+                <span class="input-group-text bg-success text-white">
                   <i class="bi bi-geo-alt" aria-hidden="true"></i>
                 </span>
               </div>
@@ -114,113 +185,588 @@
                 data-i18n-placeholder="cityPlaceholder"
                 placeholder="Warszawa"
                 autocomplete="address-level2"
+                list="citySuggestions"
               />
+              <datalist id="citySuggestions"></datalist>
               <div class="input-group-append">
                 <button 
                   id="cityLookupBtn"
-                  class="btn btn-primary" 
+                  class="btn btn-success" 
                   data-loading="lookupZip"
+                  title="Lookup ZIP codes for this city"
                 >
                   <span data-i18n="lookupZip">Lookup ZIP</span>
                 </button>
                 <button 
                   id="clearCityBtn"
                   class="btn btn-outline-secondary" 
-                  title="Clear"
+                  title="Clear city input"
                 >
                   <i class="bi bi-x-circle" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-text" data-i18n="cityHelp">Enter Polish city name</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="btn-toolbar justify-content-between" role="toolbar">
+              <div class="btn-group" role="group" aria-label="Quick actions">
+                <button id="swapInputsBtn" class="btn btn-outline-info btn-sm" title="Swap inputs">
+                  <i class="bi bi-arrow-left-right"></i> <span data-i18n="swap">Swap</span>
+                </button>
+                <button id="randomSampleBtn" class="btn btn-outline-secondary btn-sm" title="Try random sample">
+                  <i class="bi bi-shuffle"></i> <span data-i18n="sample">Sample</span>
+                </button>
+              </div>
+              <div class="btn-group" role="group" aria-label="Result actions">
+                <button 
+                  id="clearResultsBtn"
+                  class="btn btn-outline-danger btn-sm" 
+                  style="display: none;"
+                  title="Clear all results"
+                >
+                  <i class="bi bi-trash" aria-hidden="true"></i> <span data-i18n="clearResults">Clear Results</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
         
-        <button 
-          id="clearResultsBtn"
-          class="btn btn-outline-danger mb-3" 
-          style="display: none;"
-        >
-          <i class="bi bi-trash" aria-hidden="true"></i> <span data-i18n="clearResults">Clear Results</span>
-        </button>
-        
         <div id="resultsTable" style="display: none;"></div>
       </div>
 
       <!-- Batch Lookup -->
-      <div data-tab-content="batch" style="display: none;">
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="fileInput" data-i18n="importFile">Import CSV / Excel</label>
-            <div class="custom-file">
-              <input 
-                type="file" 
-                class="custom-file-input" 
-                id="fileInput" 
-                accept=".csv, .xlsx, .xls"
-                aria-describedby="fileInputHelp"
-              >
-              <label class="custom-file-label" for="fileInput" data-i18n="chooseFile">
-                Choose file...
-              </label>
-            </div>
-            <small id="fileInputHelp" class="form-text text-muted">CSV, Excel (.xlsx, .xls) files supported</small>
+      <div data-tab-content="batch" style="display: none;" role="tabpanel" aria-labelledby="batch-tab">
+        <div class="row mb-4">
+          <div class="col-12">
+            <h4 class="mb-3"><i class="bi bi-list-ul"></i> <span data-i18n="batchProcessing">Batch Processing</span></h4>
+            <p class="text-muted" data-i18n="batchProcessingDesc">Process multiple ZIP codes or cities at once using file import or manual input.</p>
           </div>
-          <div class="form-group col-md-6">
-            <label for="batchTextarea" data-i18n="pasteInputs">Or Paste Inputs (one per line)</label>
-            <textarea 
-              id="batchTextarea"
-              class="form-control" 
-              rows="4" 
-              data-i18n-placeholder="pastePlaceholder"
-              placeholder="ZIPs or Cities"
-              aria-describedby="batchTextareaHelp"
-            ></textarea>
-            <small id="batchTextareaHelp" class="form-text text-muted">One entry per line</small>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 mb-4">
+            <h5><i class="bi bi-upload"></i> <span data-i18n="importData">Import Data</span></h5>
+            <div class="form-group">
+              <label for="fileInput" data-i18n="importFile">Import CSV / Excel</label>
+              <div class="custom-file">
+                <input 
+                  type="file" 
+                  class="custom-file-input" 
+                  id="fileInput" 
+                  accept=".csv, .xlsx, .xls, .txt"
+                  aria-describedby="fileInputHelp"
+                  multiple
+                >
+                <label class="custom-file-label" for="fileInput" data-i18n="chooseFile">
+                  Choose file...
+                </label>
+              </div>
+              <small id="fileInputHelp" class="form-text text-muted">
+                <span data-i18n="supportedFormats">Supported formats</span>: CSV, Excel (.xlsx, .xls), TXT
+              </small>
+            </div>
+
+            <!-- Drag & Drop Area -->
+            <div id="dropZone" class="border border-dashed rounded p-4 text-center text-muted">
+              <i class="bi bi-cloud-upload display-4 mb-2"></i>
+              <p class="mb-0" data-i18n="dragDrop">Drag & drop files here or click to select</p>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-4">
+            <h5><i class="bi bi-type"></i> <span data-i18n="manualInput">Manual Input</span></h5>
+            <div class="form-group">
+              <label for="batchTextarea" data-i18n="pasteInputs">Paste Inputs (one per line)</label>
+              <textarea 
+                id="batchTextarea"
+                class="form-control" 
+                rows="8" 
+                data-i18n-placeholder="pastePlaceholder"
+                placeholder="ZIPs or Cities"
+                aria-describedby="batchTextareaHelp"
+                spellcheck="false"
+              ></textarea>
+              <small id="batchTextareaHelp" class="form-text text-muted">
+                <span data-i18n="onePerLine">One entry per line</span>. 
+                <span id="inputCounter">0</span> <span data-i18n="itemsEntered">items entered</span>
+              </small>
+            </div>
+            
+            <!-- Template Buttons -->
+            <div class="btn-group btn-group-sm mb-3" role="group">
+              <button id="sampleZipsBtn" class="btn btn-outline-primary" data-i18n="sampleZips">Sample ZIPs</button>
+              <button id="sampleCitiesBtn" class="btn btn-outline-primary" data-i18n="sampleCities">Sample Cities</button>
+              <button id="clearTextareaBtn" class="btn btn-outline-secondary" data-i18n="clear">Clear</button>
+            </div>
           </div>
         </div>
         
-        <div class="form-row align-items-end">
-          <div class="form-group col-md-3">
-            <label for="modeSelect" data-i18n="mode">Mode</label>
-            <select id="modeSelect" class="form-control">
-              <option value="zip" data-i18n="zipCity">ZIP → City</option>
-              <option value="city" data-i18n="cityZip">City → ZIP</option>
-            </select>
+        <!-- Processing Options -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-gear"></i> <span data-i18n="processingOptions">Processing Options</span></h5>
           </div>
-          <div class="form-group col-md-3">
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label for="modeSelect" data-i18n="mode">Mode</label>
+                <select id="modeSelect" class="form-control">
+                  <option value="zip" data-i18n="zipCity">ZIP → City</option>
+                  <option value="city" data-i18n="cityZip">City → ZIP</option>
+                  <option value="auto" data-i18n="autoDetect">Auto Detect</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="maxRowsSelect" data-i18n="maxResults">Max Results</label>
+                <select id="maxRowsSelect" class="form-control">
+                  <option value="10">10</option>
+                  <option value="50" selected>50</option>
+                  <option value="100">100</option>
+                  <option value="200">200</option>
+                  <option value="500">500</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="delaySelect" data-i18n="requestDelay">Request Delay (ms)</label>
+                <select id="delaySelect" class="form-control">
+                  <option value="0">0</option>
+                  <option value="100" selected>100</option>
+                  <option value="250">250</option>
+                  <option value="500">500</option>
+                  <option value="1000">1000</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3 d-flex align-items-end">
+                <button 
+                  id="processBatchBtn"
+                  class="btn btn-success btn-block" 
+                  data-loading="processBatch"
+                >
+                  <i class="bi bi-play-circle"></i> <span data-i18n="processBatch">Process Batch</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Advanced Options -->
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="skipDuplicates" checked>
+              <label class="form-check-label" for="skipDuplicates" data-i18n="skipDuplicates">
+                Skip duplicate entries
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="continueOnError" checked>
+              <label class="form-check-label" for="continueOnError" data-i18n="continueOnError">
+                Continue processing on errors
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Export Options -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
             <button 
-              id="processBatchBtn"
-              class="btn btn-success btn-block" 
-              data-loading="processBatch"
+              id="pauseBtn"
+              class="btn btn-warning btn-sm" 
+              style="display: none;"
             >
-              <span data-i18n="processBatch">Process Batch</span>
+              <i class="bi bi-pause-circle"></i> <span data-i18n="pause">Pause</span>
+            </button>
+            <button 
+              id="stopBtn"
+              class="btn btn-danger btn-sm" 
+              style="display: none;"
+            >
+              <i class="bi bi-stop-circle"></i> <span data-i18n="stop">Stop</span>
             </button>
           </div>
-          <div class="form-group col-md-6 text-right">
-            <div class="btn-group" role="group" aria-label="Export options">
-              <button 
-                id="copyBtn"
-                class="btn btn-outline-secondary" 
-              >
-                <i class="bi bi-clipboard" aria-hidden="true"></i> <span data-i18n="copy">Copy</span>
-              </button>
-              <button 
-                id="csvBtn"
-                class="btn btn-outline-secondary" 
-              >
-                <i class="bi bi-file-earmark-csv" aria-hidden="true"></i> <span data-i18n="csv">CSV</span>
-              </button>
-              <button 
-                id="excelBtn"
-                class="btn btn-outline-secondary" 
-              >
-                <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> <span data-i18n="excel">Excel</span>
-              </button>
-            </div>
+          <div class="btn-group" role="group" aria-label="Export options">
+            <button 
+              id="copyBtn"
+              class="btn btn-outline-secondary btn-sm" 
+              title="Copy to clipboard"
+            >
+              <i class="bi bi-clipboard" aria-hidden="true"></i> <span data-i18n="copy">Copy</span>
+            </button>
+            <button 
+              id="csvBtn"
+              class="btn btn-outline-secondary btn-sm" 
+              title="Export as CSV"
+            >
+              <i class="bi bi-file-earmark-csv" aria-hidden="true"></i> <span data-i18n="csv">CSV</span>
+            </button>
+            <button 
+              id="excelBtn"
+              class="btn btn-outline-secondary btn-sm" 
+              title="Export as Excel"
+            >
+              <i class="bi bi-file-earmark-excel" aria-hidden="true"></i> <span data-i18n="excel">Excel</span>
+            </button>
+            <button 
+              id="printBtn"
+              class="btn btn-outline-secondary btn-sm" 
+              title="Print results"
+            >
+              <i class="bi bi-printer" aria-hidden="true"></i> <span data-i18n="print">Print</span>
+            </button>
           </div>
         </div>
         
         <div id="batchResultsTable" style="display: none;"></div>
+      </div>
+
+      <!-- History Tab -->
+      <div data-tab-content="history" style="display: none;" role="tabpanel" aria-labelledby="history-tab">
+        <div class="row mb-4">
+          <div class="col-12">
+            <h4 class="mb-3"><i class="bi bi-clock-history"></i> <span data-i18n="searchHistory">Search History</span></h4>
+            <p class="text-muted" data-i18n="historyDesc">View and manage your recent searches and favorites.</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-8">
+            <!-- History Controls -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="btn-group btn-group-sm" role="group">
+                <button id="todayBtn" class="btn btn-outline-primary active" data-filter="today">
+                  <span data-i18n="today">Today</span>
+                </button>
+                <button id="weekBtn" class="btn btn-outline-primary" data-filter="week">
+                  <span data-i18n="thisWeek">This Week</span>
+                </button>
+                <button id="monthBtn" class="btn btn-outline-primary" data-filter="month">
+                  <span data-i18n="thisMonth">This Month</span>
+                </button>
+                <button id="allBtn" class="btn btn-outline-primary" data-filter="all">
+                  <span data-i18n="all">All</span>
+                </button>
+              </div>
+              <div class="btn-group btn-group-sm" role="group">
+                <button id="exportHistoryBtn" class="btn btn-outline-secondary" title="Export history">
+                  <i class="bi bi-download"></i> <span data-i18n="export">Export</span>
+                </button>
+                <button id="clearHistoryBtn" class="btn btn-outline-danger" title="Clear history">
+                  <i class="bi bi-trash"></i> <span data-i18n="clearHistory">Clear</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="bi bi-search"></i>
+                </span>
+              </div>
+              <input 
+                type="text" 
+                id="historySearch" 
+                class="form-control" 
+                data-i18n-placeholder="searchHistory"
+                placeholder="Search history..."
+              >
+              <div class="input-group-append">
+                <button id="clearSearchBtn" class="btn btn-outline-secondary" type="button">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- History List -->
+            <div id="historyList" class="list-group">
+              <div class="text-center text-muted py-4">
+                <i class="bi bi-clock-history display-4 mb-3"></i>
+                <p data-i18n="noHistory">No search history found</p>
+                <small data-i18n="historyHelp">Your searches will appear here automatically</small>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="History pagination" class="mt-3">
+              <ul id="historyPagination" class="pagination justify-content-center">
+                <!-- Pagination will be generated dynamically -->
+              </ul>
+            </nav>
+          </div>
+
+          <div class="col-lg-4">
+            <!-- Favorites -->
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="bi bi-star"></i> <span data-i18n="favorites">Favorites</span></h6>
+                <button id="clearFavoritesBtn" class="btn btn-sm btn-outline-danger" title="Clear favorites">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+              <div class="card-body">
+                <div id="favoritesList" class="list-group list-group-flush">
+                  <div class="text-center text-muted py-3">
+                    <i class="bi bi-star display-4 mb-2"></i>
+                    <p class="small mb-0" data-i18n="noFavorites">No favorites yet</p>
+                    <small data-i18n="favoritesHelp">Star searches to save them here</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card mt-3">
+              <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-bar-chart"></i> <span data-i18n="statistics">Statistics</span></h6>
+              </div>
+              <div class="card-body">
+                <div class="row text-center">
+                  <div class="col-4">
+                    <div class="h4 text-primary mb-0" id="totalSearchesStat">0</div>
+                    <small class="text-muted" data-i18n="totalSearches">Total</small>
+                  </div>
+                  <div class="col-4">
+                    <div class="h4 text-success mb-0" id="todaySearchesStat">0</div>
+                    <small class="text-muted" data-i18n="today">Today</small>
+                  </div>
+                  <div class="col-4">
+                    <div class="h4 text-info mb-0" id="favoritesStat">0</div>
+                    <small class="text-muted" data-i18n="favorites">Favorites</small>
+                  </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                  <small class="text-muted">
+                    <span data-i18n="memberSince">Member since</span>: 
+                    <span id="memberSince">-</span>
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div data-tab-content="settings" style="display: none;" role="tabpanel" aria-labelledby="settings-tab">
+        <div class="row mb-4">
+          <div class="col-12">
+            <h4 class="mb-3"><i class="bi bi-gear"></i> <span data-i18n="applicationSettings">Application Settings</span></h4>
+            <p class="text-muted" data-i18n="settingsDesc">Customize your experience and manage preferences.</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <!-- Appearance Settings -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-palette"></i> <span data-i18n="appearance">Appearance</span></h5>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="themeSelect" data-i18n="theme">Theme</label>
+                  <select id="themeSelect" class="form-control">
+                    <option value="light" data-i18n="lightTheme">Light</option>
+                    <option value="dark" data-i18n="darkTheme">Dark</option>
+                    <option value="auto" data-i18n="autoTheme">Auto (System)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="languageSelect" data-i18n="language">Language</label>
+                  <select id="languageSelect" class="form-control">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="pl">🇵🇱 Polski</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="fontSizeSelect" data-i18n="fontSize">Font Size</label>
+                  <select id="fontSizeSelect" class="form-control">
+                    <option value="small" data-i18n="small">Small</option>
+                    <option value="normal" data-i18n="normal">Normal</option>
+                    <option value="large" data-i18n="large">Large</option>
+                    <option value="extra-large" data-i18n="extraLarge">Extra Large</option>
+                  </select>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="compactMode">
+                  <label class="form-check-label" for="compactMode" data-i18n="compactMode">
+                    Compact mode
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="animationsEnabled" checked>
+                  <label class="form-check-label" for="animationsEnabled" data-i18n="animations">
+                    Enable animations
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Search Settings -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-search"></i> <span data-i18n="searchSettings">Search Settings</span></h5>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="defaultModeSelect" data-i18n="defaultMode">Default Search Mode</label>
+                  <select id="defaultModeSelect" class="form-control">
+                    <option value="zip" data-i18n="zipCity">ZIP → City</option>
+                    <option value="city" data-i18n="cityZip">City → ZIP</option>
+                    <option value="auto" data-i18n="autoDetect">Auto Detect</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="maxResultsSelect" data-i18n="maxResults">Default Max Results</label>
+                  <select id="maxResultsSelect" class="form-control">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="autoSuggestions" checked>
+                  <label class="form-check-label" for="autoSuggestions" data-i18n="autoSuggestions">
+                    Enable auto-suggestions
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fuzzySearch" checked>
+                  <label class="form-check-label" for="fuzzySearch" data-i18n="fuzzySearch">
+                    Enable fuzzy search
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="instantResults">
+                  <label class="form-check-label" for="instantResults" data-i18n="instantResults">
+                    Show results as you type
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <!-- Privacy & Data -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-shield-check"></i> <span data-i18n="privacy">Privacy & Data</span></h5>
+              </div>
+              <div class="card-body">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="saveHistory" checked>
+                  <label class="form-check-label" for="saveHistory" data-i18n="saveHistory">
+                    Save search history
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="saveSettings" checked>
+                  <label class="form-check-label" for="saveSettings" data-i18n="saveSettings">
+                    Save settings locally
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="analytics">
+                  <label class="form-check-label" for="analytics" data-i18n="analytics">
+                    Allow usage analytics
+                  </label>
+                </div>
+                <hr>
+                <div class="form-group">
+                  <label for="historyRetention" data-i18n="historyRetention">History Retention</label>
+                  <select id="historyRetention" class="form-control">
+                    <option value="7" data-i18n="days7">7 days</option>
+                    <option value="30" data-i18n="days30">30 days</option>
+                    <option value="90" data-i18n="days90">90 days</option>
+                    <option value="365" data-i18n="year1">1 year</option>
+                    <option value="-1" data-i18n="forever">Forever</option>
+                  </select>
+                </div>
+                <button id="clearAllDataBtn" class="btn btn-outline-danger btn-sm">
+                  <i class="bi bi-trash"></i> <span data-i18n="clearAllData">Clear All Data</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Map Settings -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-map"></i> <span data-i18n="mapSettings">Map Settings</span></h5>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="mapProvider" data-i18n="mapProvider">Map Provider</label>
+                  <select id="mapProvider" class="form-control">
+                    <option value="osm">OpenStreetMap</option>
+                    <option value="carto">CartoDB</option>
+                    <option value="stamen">Stamen</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="mapZoom" data-i18n="defaultZoom">Default Zoom Level</label>
+                  <input type="range" class="form-control-range" id="mapZoom" min="1" max="18" value="10">
+                  <small class="form-text text-muted">Current: <span id="zoomValue">10</span></small>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="autoFit" checked>
+                  <label class="form-check-label" for="autoFit" data-i18n="autoFit">
+                    Auto-fit map to results
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="showMarkers" checked>
+                  <label class="form-check-label" for="showMarkers" data-i18n="showMarkers">
+                    Show location markers
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-sliders"></i> <span data-i18n="advanced">Advanced</span></h5>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="apiTimeout" data-i18n="apiTimeout">API Timeout (seconds)</label>
+                  <input type="number" id="apiTimeout" class="form-control" min="5" max="60" value="30">
+                </div>
+                <div class="form-group">
+                  <label for="cacheSize" data-i18n="cacheSize">Cache Size (entries)</label>
+                  <input type="number" id="cacheSize" class="form-control" min="10" max="1000" value="100">
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="debugMode">
+                  <label class="form-check-label" for="debugMode" data-i18n="debugMode">
+                    Enable debug mode
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="offlineMode">
+                  <label class="form-check-label" for="offlineMode" data-i18n="offlineMode">
+                    Offline mode (cache only)
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center">
+          <button id="resetSettingsBtn" class="btn btn-outline-warning mr-2">
+            <i class="bi bi-arrow-clockwise"></i> <span data-i18n="resetSettings">Reset to Defaults</span>
+          </button>
+          <button id="saveSettingsBtn" class="btn btn-primary">
+            <i class="bi bi-check-circle"></i> <span data-i18n="saveSettings">Save Settings</span>
+          </button>
+        </div>
       </div>
 
       <!-- Map View -->

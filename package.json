@@ -1,7 +1,7 @@
 {
   "name": "polish-zip-city-lookup",
   "version": "1.0.0",
-  "description": "A lightweight, user-friendly web application for looking up Polish postal ZIP codes and cities",
+  "description": "Enhanced web application for Polish postal ZIP codes and cities lookup with history, favorites, batch processing, and interactive maps",
   "main": "index.html",
   "scripts": {
     "dev": "http-server . -p 8000 -o",
@@ -16,10 +16,12 @@
     "postal-codes",
     "zip-codes",
     "poland",
-    "vue",
     "javascript",
     "leaflet",
-    "maps"
+    "maps",
+    "vanilla-js",
+    "bootstrap",
+    "responsive"
   ],
   "author": "Hayk Jomardyan",
   "license": "MIT",
