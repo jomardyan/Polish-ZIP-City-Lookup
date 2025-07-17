@@ -97,6 +97,13 @@ $(document).ready(function() {
             // Load user preferences
             this.loadUserPreferences();
             
+            // Load settings
+            this.loadSettings();
+            
+            // Update UI displays
+            this.updateFavoritesDisplay();
+            this.updateHistoryDisplay();
+            
             console.log('Polish ZIP App initialized successfully');
         },
 
@@ -413,6 +420,7 @@ $(document).ready(function() {
             $(document).on('click', '[data-tab]', function(e) {
                 e.preventDefault();
                 const tabName = $(this).data('tab');
+                console.log('Tab clicked:', tabName);
                 self.switchTab(tabName);
             });
             
@@ -421,6 +429,79 @@ $(document).ready(function() {
                 const tabId = $(e.target).attr('href').replace('#', '');
                 self.state.activeTab = tabId;
                 self.onTabChange(tabId);
+            });
+
+            // Settings save button
+            $('#saveSettingsBtn').on('click', function(e) {
+                e.preventDefault();
+                self.saveSettings();
+            });
+
+            // Reset settings button
+            $('#resetSettingsBtn').on('click', function(e) {
+                e.preventDefault();
+                self.resetSettings();
+            });
+
+            // Batch processing
+            $('#processBatchBtn').on('click', function(e) {
+                e.preventDefault();
+                self.processBatch();
+            });
+
+            // Sample data buttons
+            $('#sampleZipsBtn').on('click', function(e) {
+                e.preventDefault();
+                $('#batchTextarea').val('00-001\n31-000\n80-001\n61-001\n50-001');
+                self.updateInputCounter();
+            });
+
+            $('#sampleCitiesBtn').on('click', function(e) {
+                e.preventDefault();
+                $('#batchTextarea').val('Warszawa\nKraków\nGdańsk\nPoznań\nWrocław');
+                self.updateInputCounter();
+            });
+
+            $('#clearTextareaBtn').on('click', function(e) {
+                e.preventDefault();
+                $('#batchTextarea').val('');
+                self.updateInputCounter();
+            });
+
+            // Input counter
+            $('#batchTextarea').on('input', function() {
+                self.updateInputCounter();
+            });
+
+            // History filter buttons
+            $(document).on('click', '[data-filter]', function(e) {
+                e.preventDefault();
+                const filter = $(this).data('filter');
+                $('[data-filter]').removeClass('active');
+                $(this).addClass('active');
+                self.filterHistory(filter);
+            });
+
+            // Clear history
+            $('#clearHistoryBtn').on('click', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to clear all search history?')) {
+                    self.state.history = [];
+                    self.saveUserPreferences();
+                    self.updateHistoryDisplay();
+                    self.showAlert('Search history cleared', 'info');
+                }
+            });
+
+            // Clear favorites
+            $('#clearFavoritesBtn').on('click', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to clear all favorites?')) {
+                    self.state.favorites = [];
+                    self.saveUserPreferences();
+                    self.updateFavoritesDisplay();
+                    self.showAlert('Favorites cleared', 'info');
+                }
             });
         },
 
@@ -795,6 +876,7 @@ $(document).ready(function() {
                     addedAt: new Date().toISOString()
                 });
                 this.saveUserPreferences();
+                this.updateFavoritesDisplay(); // Update the favorites display
                 this.showAlert(`Added "${result.city} (${result.zipCode})" to favorites`, 'success');
             } else {
                 this.showAlert(`"${result.city} (${result.zipCode})" is already in favorites`, 'info');
@@ -946,6 +1028,566 @@ $(document).ready(function() {
             } catch (error) {
                 console.warn('Failed to save user preferences:', error);
             }
+        },
+
+        // Save settings
+        saveSettings: function() {
+            try {
+                const settings = {
+                    theme: $('#themeSelect').val() || this.state.theme,
+                    language: $('#languageSelect').val() || this.state.locale,
+                    fontSize: $('#fontSizeSelect').val() || 'normal',
+                    compactMode: $('#compactMode').is(':checked'),
+                    animationsEnabled: $('#animationsEnabled').is(':checked'),
+                    defaultMode: $('#defaultModeSelect').val() || 'auto',
+                    maxResults: $('#maxResultsSelect').val() || '50',
+                    autoSuggestions: $('#autoSuggestions').is(':checked'),
+                    fuzzySearch: $('#fuzzySearch').is(':checked'),
+                    instantResults: $('#instantResults').is(':checked'),
+                    saveHistory: $('#saveHistory').is(':checked'),
+                    saveSettings: $('#saveSettings').is(':checked'),
+                    analytics: $('#analytics').is(':checked'),
+                    historyRetention: $('#historyRetention').val() || '30',
+                    mapProvider: $('#mapProvider').val() || 'osm',
+                    mapZoom: $('#mapZoom').val() || '10',
+                    autoFit: $('#autoFit').is(':checked'),
+                    showMarkers: $('#showMarkers').is(':checked'),
+                    apiTimeout: $('#apiTimeout').val() || '30',
+                    cacheSize: $('#cacheSize').val() || '100',
+                    debugMode: $('#debugMode').is(':checked'),
+                    offlineMode: $('#offlineMode').is(':checked')
+                };
+
+                // Save to localStorage
+                localStorage.setItem('app-settings', JSON.stringify(settings));
+                
+                // Save to cookies
+                this.setCookie('app-settings', JSON.stringify(settings), 365);
+                
+                // Apply theme if changed
+                if (settings.theme !== this.state.theme) {
+                    this.setTheme(settings.theme);
+                }
+                
+                // Apply language if changed
+                if (settings.language !== this.state.locale) {
+                    this.setLanguage(settings.language);
+                }
+
+                this.showAlert('Settings saved successfully! Page will refresh to apply changes.', 'success');
+                
+                // Refresh page after 2 seconds
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Failed to save settings:', error);
+                this.showAlert('Failed to save settings. Please try again.', 'danger');
+            }
+        },
+
+        // Reset settings
+        resetSettings: function() {
+            if (confirm('Are you sure you want to reset all settings to defaults? This will refresh the page.')) {
+                // Clear localStorage
+                localStorage.removeItem('app-settings');
+                localStorage.removeItem('preferred-theme');
+                localStorage.removeItem('preferred-language');
+                
+                // Clear cookies
+                this.deleteCookie('app-settings');
+                
+                this.showAlert('Settings reset to defaults. Page will refresh.', 'info');
+                
+                // Refresh page after 1 second
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+        },
+
+        // Cookie management functions
+        setCookie: function(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+        },
+
+        getCookie: function(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+            }
+            return null;
+        },
+
+        deleteCookie: function(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        },
+
+        // Load settings from cookies and localStorage
+        loadSettings: function() {
+            try {
+                // Try to load from cookies first, then localStorage
+                let settings = null;
+                const cookieSettings = this.getCookie('app-settings');
+                const localSettings = localStorage.getItem('app-settings');
+                
+                if (cookieSettings) {
+                    settings = JSON.parse(cookieSettings);
+                } else if (localSettings) {
+                    settings = JSON.parse(localSettings);
+                }
+                
+                if (settings) {
+                    // Apply settings to form elements
+                    $('#themeSelect').val(settings.theme || 'auto');
+                    $('#languageSelect').val(settings.language || 'pl');
+                    $('#fontSizeSelect').val(settings.fontSize || 'normal');
+                    $('#compactMode').prop('checked', settings.compactMode || false);
+                    $('#animationsEnabled').prop('checked', settings.animationsEnabled !== false);
+                    $('#defaultModeSelect').val(settings.defaultMode || 'auto');
+                    $('#maxResultsSelect').val(settings.maxResults || '50');
+                    $('#autoSuggestions').prop('checked', settings.autoSuggestions !== false);
+                    $('#fuzzySearch').prop('checked', settings.fuzzySearch !== false);
+                    $('#instantResults').prop('checked', settings.instantResults || false);
+                    $('#saveHistory').prop('checked', settings.saveHistory !== false);
+                    $('#saveSettings').prop('checked', settings.saveSettings !== false);
+                    $('#analytics').prop('checked', settings.analytics || false);
+                    $('#historyRetention').val(settings.historyRetention || '30');
+                    $('#mapProvider').val(settings.mapProvider || 'osm');
+                    $('#mapZoom').val(settings.mapZoom || '10');
+                    $('#autoFit').prop('checked', settings.autoFit !== false);
+                    $('#showMarkers').prop('checked', settings.showMarkers !== false);
+                    $('#apiTimeout').val(settings.apiTimeout || '30');
+                    $('#cacheSize').val(settings.cacheSize || '100');
+                    $('#debugMode').prop('checked', settings.debugMode || false);
+                    $('#offlineMode').prop('checked', settings.offlineMode || false);
+                    
+                    console.log('Settings loaded successfully');
+                }
+            } catch (error) {
+                console.warn('Failed to load settings:', error);
+            }
+        },
+
+        // Update favorites display
+        updateFavoritesDisplay: function() {
+            const $favoritesList = $('#favoritesList');
+            $favoritesList.empty();
+            
+            if (this.state.favorites.length === 0) {
+                $favoritesList.html(`
+                    <div class="text-center text-muted py-3">
+                        <i class="bi bi-star display-4 mb-2"></i>
+                        <p class="small mb-0" data-i18n="noFavorites">No favorites yet</p>
+                        <small data-i18n="favoritesHelp">Star searches to save them here</small>
+                    </div>
+                `);
+            } else {
+                this.state.favorites.forEach((favorite, index) => {
+                    const favoriteHtml = `
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${favorite.city}</strong>
+                                <br>
+                                <small class="text-muted">${favorite.zipCode} - ${favorite.voivodeship}</small>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary btn-sm" onclick="PolishZipApp.searchFromFavorite(${index})">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm" onclick="PolishZipApp.removeFromFavorites(${index})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    $favoritesList.append(favoriteHtml);
+                });
+            }
+            
+            // Update favorites count
+            $('#favoritesStat').text(this.state.favorites.length);
+        },
+
+        // Search from favorite
+        searchFromFavorite: function(index) {
+            const favorite = this.state.favorites[index];
+            if (favorite) {
+                $('#zipInput').val(favorite.zipCode);
+                this.switchTab('single');
+                this.performZipSearch();
+            }
+        },
+
+        // Remove from favorites
+        removeFromFavorites: function(index) {
+            if (index >= 0 && index < this.state.favorites.length) {
+                const removed = this.state.favorites.splice(index, 1)[0];
+                this.saveUserPreferences();
+                this.updateFavoritesDisplay();
+                this.showAlert(`Removed "${removed.city}" from favorites`, 'info');
+            }
+        },
+
+        // Update history display
+        updateHistoryDisplay: function() {
+            const $historyList = $('#historyList');
+            $historyList.empty();
+            
+            if (this.state.history.length === 0) {
+                $historyList.html(`
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-clock-history display-4 mb-3"></i>
+                        <p data-i18n="noHistory">No search history found</p>
+                        <small data-i18n="historyHelp">Your searches will appear here automatically</small>
+                    </div>
+                `);
+            } else {
+                this.state.history.slice(0, 10).forEach((item, index) => {
+                    const timestamp = new Date(item.timestamp || Date.now()).toLocaleString();
+                    const historyHtml = `
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${item.city}</strong>
+                                <span class="badge bg-primary">${item.zipCode}</span>
+                                <br>
+                                <small class="text-muted">${item.voivodeship} • ${timestamp}</small>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary btn-sm" onclick="PolishZipApp.searchFromHistory(${index})">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                                <button class="btn btn-outline-success btn-sm" onclick="PolishZipApp.addToFavorites(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                                    <i class="bi bi-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    $historyList.append(historyHtml);
+                });
+            }
+            
+            // Update history stats
+            $('#totalSearchesStat').text(this.state.history.length);
+            $('#todaySearchesStat').text(this.state.history.filter(item => {
+                const today = new Date().toDateString();
+                const itemDate = new Date(item.timestamp || Date.now()).toDateString();
+                return today === itemDate;
+            }).length);
+        },
+
+        // Search from history
+        searchFromHistory: function(index) {
+            const historyItem = this.state.history[index];
+            if (historyItem) {
+                $('#zipInput').val(historyItem.zipCode);
+                this.switchTab('single');
+                this.performZipSearch();
+            }
+        },
+
+        // Enhanced add to history with timestamp
+        addToHistory: function(result) {
+            const historyItem = {
+                ...result,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Remove existing entry if it exists
+            this.state.history = this.state.history.filter(item => 
+                !(item.zipCode === result.zipCode && item.city === result.city)
+            );
+            
+            // Add to beginning
+            this.state.history.unshift(historyItem);
+            
+            // Limit history size
+            if (this.state.history.length > this.config.HISTORY_LIMIT) {
+                this.state.history = this.state.history.slice(0, this.config.HISTORY_LIMIT);
+            }
+            
+            this.saveUserPreferences();
+            this.updateHistoryDisplay();
+        },
+
+        // Update input counter
+        updateInputCounter: function() {
+            const text = $('#batchTextarea').val().trim();
+            const lines = text ? text.split('\n').filter(line => line.trim().length > 0) : [];
+            $('#inputCounter').text(lines.length);
+        },
+
+        // Process batch
+        processBatch: function() {
+            const text = $('#batchTextarea').val().trim();
+            if (!text) {
+                this.showAlert('Please enter some data to process', 'warning');
+                return;
+            }
+
+            const lines = text.split('\n').filter(line => line.trim().length > 0);
+            if (lines.length === 0) {
+                this.showAlert('No valid entries found', 'warning');
+                return;
+            }
+
+            const mode = $('#modeSelect').val();
+            const maxResults = parseInt($('#maxRowsSelect').val()) || 50;
+            const delay = parseInt($('#delaySelect').val()) || 100;
+            const skipDuplicates = $('#skipDuplicates').is(':checked');
+            const continueOnError = $('#continueOnError').is(':checked');
+
+            // Limit to max results
+            const processLines = lines.slice(0, maxResults);
+            
+            if (skipDuplicates) {
+                const uniqueLines = [...new Set(processLines.map(line => line.trim().toLowerCase()))];
+                processLines.length = 0;
+                processLines.push(...uniqueLines);
+            }
+
+            this.state.isProcessingBatch = true;
+            this.showBatchProgress(0, processLines.length);
+            
+            const results = [];
+            let processed = 0;
+            let errors = 0;
+
+            const processNext = () => {
+                if (processed >= processLines.length || !this.state.isProcessingBatch) {
+                    this.finishBatchProcessing(results, processed, errors);
+                    return;
+                }
+
+                const line = processLines[processed].trim();
+                const isZip = this.validateZipCode(line);
+                
+                setTimeout(() => {
+                    if (mode === 'auto') {
+                        if (isZip) {
+                            this.processBatchItem(line, 'zip', results, () => {
+                                processed++;
+                                this.updateBatchProgress(processed, processLines.length, errors);
+                                processNext();
+                            }, (error) => {
+                                errors++;
+                                if (continueOnError) {
+                                    processed++;
+                                    this.updateBatchProgress(processed, processLines.length, errors);
+                                    processNext();
+                                } else {
+                                    this.finishBatchProcessing(results, processed, errors);
+                                }
+                            });
+                        } else {
+                            this.processBatchItem(line, 'city', results, () => {
+                                processed++;
+                                this.updateBatchProgress(processed, processLines.length, errors);
+                                processNext();
+                            }, (error) => {
+                                errors++;
+                                if (continueOnError) {
+                                    processed++;
+                                    this.updateBatchProgress(processed, processLines.length, errors);
+                                    processNext();
+                                } else {
+                                    this.finishBatchProcessing(results, processed, errors);
+                                }
+                            });
+                        }
+                    } else {
+                        this.processBatchItem(line, mode, results, () => {
+                            processed++;
+                            this.updateBatchProgress(processed, processLines.length, errors);
+                            processNext();
+                        }, (error) => {
+                            errors++;
+                            if (continueOnError) {
+                                processed++;
+                                this.updateBatchProgress(processed, processLines.length, errors);
+                                processNext();
+                            } else {
+                                this.finishBatchProcessing(results, processed, errors);
+                            }
+                        });
+                    }
+                }, delay);
+            };
+
+            processNext();
+        },
+
+        // Process individual batch item
+        processBatchItem: function(item, mode, results, successCallback, errorCallback) {
+            if (mode === 'zip') {
+                const normalizedZip = this.normalizeZipCode(item);
+                const result = this.postalDatabase[normalizedZip];
+                
+                if (result) {
+                    results.push({
+                        input: item,
+                        zipCode: normalizedZip,
+                        city: result.city,
+                        voivodeship: result.voivodeship,
+                        county: result.county,
+                        coordinates: result.coordinates,
+                        status: 'success'
+                    });
+                    successCallback();
+                } else {
+                    results.push({
+                        input: item,
+                        status: 'error',
+                        error: 'ZIP code not found'
+                    });
+                    errorCallback('ZIP code not found');
+                }
+            } else {
+                const normalizedCity = this.normalizeCityName(item);
+                const zipCodes = this.cityDatabase[normalizedCity];
+                
+                if (zipCodes && zipCodes.length > 0) {
+                    zipCodes.slice(0, 3).forEach(zip => { // Limit to 3 ZIP codes per city
+                        const data = this.postalDatabase[zip];
+                        if (data) {
+                            results.push({
+                                input: item,
+                                zipCode: zip,
+                                city: data.city,
+                                voivodeship: data.voivodeship,
+                                county: data.county,
+                                coordinates: data.coordinates,
+                                status: 'success'
+                            });
+                        }
+                    });
+                    successCallback();
+                } else {
+                    results.push({
+                        input: item,
+                        status: 'error',
+                        error: 'City not found'
+                    });
+                    errorCallback('City not found');
+                }
+            }
+        },
+
+        // Show batch progress
+        showBatchProgress: function(current, total) {
+            $('#progressContainer').show();
+            this.updateProgress((current / total) * 100);
+            $('#progressText').text(`Processing batch: ${current} of ${total}`);
+            $('#progressStats').text(`${current} of ${total} processed`);
+            $('#processBatchBtn').prop('disabled', true).html('<i class="bi bi-hourglass-split"></i> Processing...');
+        },
+
+        // Update batch progress
+        updateBatchProgress: function(current, total, errors) {
+            const percent = Math.round((current / total) * 100);
+            this.updateProgress(percent);
+            $('#progressText').text(`Processing batch: ${current} of ${total}`);
+            $('#progressStats').text(`${current} of ${total} processed (${errors} errors)`);
+        },
+
+        // Finish batch processing
+        finishBatchProcessing: function(results, processed, errors) {
+            this.state.isProcessingBatch = false;
+            $('#progressContainer').hide();
+            $('#processBatchBtn').prop('disabled', false).html('<i class="bi bi-play-circle"></i> Process Batch');
+            
+            // Display results
+            this.displayBatchResults(results);
+            
+            const successCount = results.filter(r => r.status === 'success').length;
+            this.showAlert(
+                `Batch processing complete! Processed: ${processed}, Success: ${successCount}, Errors: ${errors}`,
+                errors > 0 ? 'warning' : 'success'
+            );
+        },
+
+        // Display batch results
+        displayBatchResults: function(results) {
+            const $resultsTable = $('#batchResultsTable');
+            $resultsTable.empty().show();
+            
+            if (results.length === 0) {
+                $resultsTable.html('<div class="alert alert-info">No results to display</div>');
+                return;
+            }
+
+            let tableHtml = `
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Input</th>
+                                <th>ZIP Code</th>
+                                <th>City</th>
+                                <th>Voivodeship</th>
+                                <th>County</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            results.forEach((result, index) => {
+                const statusClass = result.status === 'success' ? 'success' : 'danger';
+                const statusIcon = result.status === 'success' ? 'check-circle' : 'x-circle';
+                
+                tableHtml += `
+                    <tr class="table-${statusClass === 'success' ? 'light' : 'warning'}">
+                        <td><strong>${result.input}</strong></td>
+                        <td>${result.zipCode || '-'}</td>
+                        <td>${result.city || '-'}</td>
+                        <td>${result.voivodeship || '-'}</td>
+                        <td>${result.county || '-'}</td>
+                        <td>
+                            <span class="badge bg-${statusClass}">
+                                <i class="bi bi-${statusIcon}"></i>
+                                ${result.status}
+                            </span>
+                            ${result.error ? `<br><small class="text-muted">${result.error}</small>` : ''}
+                        </td>
+                        <td>
+                            ${result.status === 'success' ? `
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="PolishZipApp.showOnMap([${result.coordinates}], '${result.city}')">
+                                        <i class="bi bi-geo-alt"></i>
+                                    </button>
+                                    <button class="btn btn-outline-success btn-sm" onclick="PolishZipApp.addToFavorites(${JSON.stringify(result).replace(/"/g, '&quot;')})">
+                                        <i class="bi bi-star"></i>
+                                    </button>
+                                </div>
+                            ` : '-'}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHtml += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            $resultsTable.html(tableHtml);
+        },
+
+        // Filter history
+        filterHistory: function(filter) {
+            // This is a placeholder - in a real implementation you'd filter the history
+            console.log('Filtering history by:', filter);
+            this.updateHistoryDisplay();
         }
     };
 
