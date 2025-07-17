@@ -1,66 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Primary Meta Tags -->
   <title>Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool</title>
-  <meta name="title" content="Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool" />
-  <meta name="description" content="Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, search history, and multilingual support. Find ZIP codes and cities in Poland instantly." />
-  <meta name="keywords" content="polish postal codes, kod pocztowy polska, zip codes poland, city lookup poland, miejscowość polska, batch processing, interactive maps, geocoding, postal services" />
-  <meta name="author" content="Hayk Jomardyan" />
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-  <meta name="language" content="English, Polish, German, French, Spanish, Italian, Dutch, Russian, Chinese" />
-  <meta name="geo.region" content="PL" />
-  <meta name="geo.country" content="Poland" />
-  <meta name="theme-color" content="#007bff" />
+  <meta name="title" content="Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool">
+  <meta name="description" content="Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, search history, and multilingual support. Find ZIP codes and cities in Poland instantly.">
+  <meta name="keywords" content="polish postal codes, kod pocztowy polska, zip codes poland, city lookup poland, miejscowość polska, batch processing, interactive maps, geocoding, postal services">
+  <meta name="author" content="Hayk Jomardyan">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="language" content="English, Polish, German, French, Spanish, Italian, Dutch, Russian, Chinese">
+  <meta name="geo.region" content="PL">
+  <meta name="geo.country" content="Poland">
+  <meta name="theme-color" content="#007bff">
   
   <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/" />
-  <meta property="og:title" content="Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool" />
-  <meta property="og:description" content="Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, and multilingual support. Find ZIP codes and cities in Poland instantly." />
-  <meta property="og:image" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/assets/images/og-image.png" />
-  <meta property="og:site_name" content="Polish ZIP & City Lookup" />
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:locale:alternate" content="pl_PL" />
-  <meta property="og:locale:alternate" content="de_DE" />
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/">
+  <meta property="og:title" content="Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool">
+  <meta property="og:description" content="Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, and multilingual support. Find ZIP codes and cities in Poland instantly.">
+  <meta property="og:image" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📮</text></svg>">
+  <meta property="og:site_name" content="Polish ZIP & City Lookup">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="pl_PL">
+  <meta property="og:locale:alternate" content="de_DE">
   
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/" />
-  <meta property="twitter:title" content="Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool" />
-  <meta property="twitter:description" content="Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, and multilingual support." />
-  <meta property="twitter:image" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/assets/images/twitter-image.png" />
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/">
+  <meta property="twitter:title" content="Polish ZIP Code & City Lookup - Advanced Postal Code Search Tool">
+  <meta property="twitter:description" content="Comprehensive Polish postal code and city lookup tool with batch processing, interactive maps, and multilingual support.">
+  <meta property="twitter:image" content="https://jomardyan.github.io/Polish-ZIP-City-Lookup/assets/images/twitter-image.png">
   
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://jomardyan.github.io/Polish-ZIP-City-Lookup/" />
+  <link rel="canonical" href="https://jomardyan.github.io/Polish-ZIP-City-Lookup/">
   
-  <!-- Favicon and App Icons -->
-  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png" />
-  <link rel="manifest" href="assets/manifest.json" />
+  <!-- Favicon and App Icons - Using Unicode emoji as temporary solution -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📮</text></svg>">
   
   <!-- Preload critical resources -->
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" as="style" />
-  <link rel="preload" href="assets/css/styles.css" as="style" />
-  <link rel="preload" href="assets/js/vanilla-app.js" as="script" />
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style" crossorigin="anonymous">
+  <link rel="preload" href="assets/css/styles.css" as="style">
+  <link rel="preload" href="assets/js/vanilla-app.js" as="script">
   
   <!-- DNS Prefetch for external resources -->
-  <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
-  <link rel="dns-prefetch" href="//unpkg.com" />
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="//unpkg.com">
   
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous" />
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
   <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+  
+  <!-- PreferredTheme.js for system preference detection -->
+  <script>
+    // Initialize theme preference detection
+    (function() {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)');
+      const prefersHighContrast = window.matchMedia('(prefers-contrast: high)');
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      
+      // Store system preferences
+      window.systemPreferences = {
+        colorScheme: prefersDark.matches ? 'dark' : 'light',
+        highContrast: prefersHighContrast.matches,
+        reducedMotion: prefersReducedMotion.matches
+      };
+      
+      // Listen for changes
+      prefersDark.addEventListener('change', (e) => {
+        window.systemPreferences.colorScheme = e.matches ? 'dark' : 'light';
+        if (document.body.classList.contains('theme-auto')) {
+          window.dispatchEvent(new CustomEvent('systemThemeChange', { 
+            detail: { theme: window.systemPreferences.colorScheme } 
+          }));
+        }
+      });
+      
+      prefersHighContrast.addEventListener('change', (e) => {
+        window.systemPreferences.highContrast = e.matches;
+        document.documentElement.classList.toggle('high-contrast', e.matches);
+      });
+      
+      prefersReducedMotion.addEventListener('change', (e) => {
+        window.systemPreferences.reducedMotion = e.matches;
+        document.documentElement.classList.toggle('reduced-motion', e.matches);
+      });
+      
+      // Apply initial classes
+      if (window.systemPreferences.highContrast) {
+        document.documentElement.classList.add('high-contrast');
+      }
+      if (window.systemPreferences.reducedMotion) {
+        document.documentElement.classList.add('reduced-motion');
+      }
+    })();
+        // Initialize theme system on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize translation manager
+            if (typeof TranslationManager !== 'undefined') {
+                window.translationManager = new TranslationManager();
+            }
+            
+            // Initialize theme from localStorage or system preference
+            initializeTheme();
+            
+            // Initialize language system
+            initializeLanguage();
+            
+            // Theme switching functionality
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const theme = this.dataset.theme;
+                    setTheme(theme);
+                    
+                    // Update UI
+                    updateThemeDropdown(theme);
+                });
+            });
+            
+            // Language switching functionality
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lang = this.dataset.locale;
+                    const flagIcon = this.querySelector('span').textContent;
+                    const languageName = this.querySelector('.fw-semibold').textContent;
+                    const langCode = this.dataset.locale.toUpperCase();
+                    
+                    setLanguage(lang);
+                    
+                    // Update dropdown display
+                    updateLanguageDropdown(lang, flagIcon, languageName, langCode);
+                });
+            });
+        });
+
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('preferred-theme') || 'auto';
+            setTheme(savedTheme);
+            updateThemeDropdown(savedTheme);
+        }
+
+        function setTheme(theme) {
+            const body = document.body;
+            
+            // Remove existing theme classes
+            body.classList.remove('theme-light', 'theme-dark');
+            
+            if (theme === 'light') {
+                body.classList.add('theme-light');
+                body.setAttribute('data-theme', 'light');
+            } else if (theme === 'dark') {
+                body.classList.add('theme-dark');
+                body.setAttribute('data-theme', 'dark');
+            } else {
+                // Auto theme - use system preference
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (systemPrefersDark) {
+                    body.classList.add('theme-dark');
+                    body.setAttribute('data-theme', 'dark');
+                } else {
+                    body.classList.add('theme-light');
+                    body.setAttribute('data-theme', 'light');
+                }
+            }
+            
+            // Save preference
+            localStorage.setItem('preferred-theme', theme);
+        }
+
+        function updateThemeDropdown(activeTheme) {
+            const themeButton = document.querySelector('[data-bs-toggle="dropdown"]#themeDropdown');
+            const themeOptions = document.querySelectorAll('.theme-option');
+            
+            // Remove active state from all options
+            themeOptions.forEach(option => {
+                option.classList.remove('active');
+                option.querySelector('.theme-check').style.display = 'none';
+            });
+            
+            // Add active state to selected option
+            const activeOption = document.querySelector(`.theme-option[data-theme="${activeTheme}"]`);
+            if (activeOption) {
+                activeOption.classList.add('active');
+                activeOption.querySelector('.theme-check').style.display = 'inline';
+                
+                // Update button text and icon
+                const optionIcon = activeOption.querySelector('i').className;
+                const optionText = activeOption.querySelector('.fw-semibold').textContent;
+                
+                themeButton.innerHTML = `
+                    <i class="${optionIcon} me-1"></i>
+                    <span class="ms-1">${optionText}</span>
+                `;
+            }
+        }
+
+        function initializeLanguage() {
+            const savedLang = localStorage.getItem('preferred-language') || 'pl';
+            const languageOption = document.querySelector(`.language-option[data-locale="${savedLang}"]`);
+            
+            if (languageOption) {
+                const flagIcon = languageOption.querySelector('span').textContent;
+                const languageName = languageOption.querySelector('.fw-semibold').textContent;
+                const langCode = languageOption.dataset.locale.toUpperCase();
+                
+                setLanguage(savedLang);
+                updateLanguageDropdown(savedLang, flagIcon, languageName, langCode);
+            }
+        }
+
+        function setLanguage(lang) {
+            // Use the translation manager if available
+            if (window.translationManager && typeof window.translationManager.setLanguage === 'function') {
+                window.translationManager.setLanguage(lang).then(() => {
+                    window.translationManager.updateDOM();
+                });
+            }
+            
+            // Save preference
+            localStorage.setItem('preferred-language', lang);
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+        }
+
+        function updateLanguageDropdown(activeLang, flagIcon, languageName, langCode) {
+            const languageButton = document.querySelector('#langDropdown');
+            const languageOptions = document.querySelectorAll('.language-option');
+            
+            // Remove active state from all options
+            languageOptions.forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Add active state to selected option
+            const activeOption = document.querySelector(`.language-option[data-locale="${activeLang}"]`);
+            if (activeOption) {
+                activeOption.classList.add('active');
+                
+                // Update navbar language display
+                document.getElementById('currentLangFlag').textContent = flagIcon;
+                document.getElementById('currentLangCode').textContent = langCode;
+            }
+        }
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+            const currentTheme = localStorage.getItem('preferred-theme');
+            if (currentTheme === 'auto' || !currentTheme) {
+                setTheme('auto');
+            }
+        });
+    </script>
+  
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/styles.css">
   
   <!-- Structured Data for SEO -->
   <script type="application/ld+json">
@@ -91,54 +293,69 @@
 <body>
   <div id="app">
     <!-- Loading Screen -->
-    <div id="loadingScreen" class="d-flex justify-content-center align-items-center position-fixed w-100 h-100" style="top: 0; left: 0; background: rgba(255,255,255,0.9); z-index: 9999; display: none !important;">
+    <div id="loadingScreen" class="d-flex justify-content-center align-items-center position-fixed w-100 h-100" style="top: 0; left: 0; background: linear-gradient(135deg, rgba(0,123,255,0.1) 0%, rgba(255,255,255,0.95) 100%); backdrop-filter: blur(10px); z-index: 9999; display: none !important;">
       <div class="text-center">
-        <div class="spinner-border text-primary mb-3" role="status">
-          <span class="sr-only">Loading...</span>
+        <div class="loading-animation mb-4">
+          <div class="spinner-grow text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-primary" role="status" style="animation-delay: 0.15s;">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow text-primary" role="status" style="animation-delay: 0.3s;">
+            <span class="sr-only">Loading...</span>
+          </div>
         </div>
-        <p class="mb-0" data-i18n="loading">Loading application...</p>
+        <h5 class="text-primary mb-2" data-i18n="brand">Polish ZIP & City Lookup</h5>
+        <p class="mb-0 text-muted" data-i18n="loading">Loading application...</p>
+        <div class="progress mt-3" style="height: 4px; width: 200px; margin: 0 auto;">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+        </div>
       </div>
     </div>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm" role="navigation" aria-label="Main navigation">
-      <a class="navbar-brand d-flex align-items-center" href="#" aria-label="Polish ZIP & City Lookup - Home">
-        <span class="navbar-brand-icon me-2" role="img" aria-label="Mail icon">📮</span>
-        <span data-i18n="brandShort">Polish ZIP Lookup</span>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm border-bottom" aria-label="Main navigation">
+      <a class="navbar-brand d-flex align-items-center hover-lift" href="#" aria-label="Polish ZIP & City Lookup - Home">
+        <span class="navbar-brand-icon me-2 fs-4" role="img" aria-label="Mail icon">📮</span>
+        <span data-i18n="brandShort" class="fw-bold">Polish ZIP Lookup</span>
       </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navMenu" 
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" 
               aria-controls="navMenu" aria-expanded="false" aria-label="Toggle main navigation menu">
         <span class="navbar-toggler-icon"></span>
       </button>
       
       <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav mr-auto" role="tablist" aria-label="Application sections">
+        <ul class="navbar-nav me-auto nav-tabs-modern" role="tablist" aria-label="Application sections">
           <li class="nav-item" role="none">
-            <a class="nav-link active" href="#" data-tab="single" role="tab" 
+            <a class="nav-link active hover-scale" href="#" data-tab="single" role="tab" 
                aria-selected="true" aria-controls="singleTab" id="singleTabLink"
                title="Single ZIP code or city lookup">
               <i class="bi bi-search" aria-hidden="true"></i> 
               <span data-i18n="lookup">Lookup</span>
+              <span class="badge bg-primary rounded-pill ms-1" id="singleCount" style="display: none;">0</span>
             </a>
           </li>
           <li class="nav-item" role="none">
-            <a class="nav-link" href="#" data-tab="batch" role="tab" 
+            <a class="nav-link hover-scale" href="#" data-tab="batch" role="tab" 
                aria-selected="false" aria-controls="batchTab" id="batchTabLink"
                title="Process multiple ZIP codes or cities at once">
               <i class="bi bi-list-ul" aria-hidden="true"></i> 
               <span data-i18n="batch">Batch</span>
+              <span class="badge bg-secondary rounded-pill ms-1" id="batchCount" style="display: none;">0</span>
             </a>
           </li>
           <li class="nav-item" role="none">
-            <a class="nav-link" href="#" data-tab="history" role="tab" 
+            <a class="nav-link hover-scale" href="#" data-tab="history" role="tab" 
                aria-selected="false" aria-controls="historyTab" id="historyTabLink"
                title="View search history and favorites">
               <i class="bi bi-clock-history" aria-hidden="true"></i> 
               <span data-i18n="history">History</span>
+              <span class="badge bg-info rounded-pill ms-1" id="historyCount" style="display: none;">0</span>
             </a>
           </li>
           <li class="nav-item" role="none">
-            <a class="nav-link" href="#" data-tab="settings" role="tab" 
+            <a class="nav-link hover-scale" href="#" data-tab="settings" role="tab" 
                aria-selected="false" aria-controls="settingsTab" id="settingsTabLink"
                title="Customize application settings and preferences">
               <i class="bi bi-gear" aria-hidden="true"></i> 
@@ -149,39 +366,264 @@
         <ul class="navbar-nav">
           <!-- Quick Stats -->
           <li class="nav-item d-none d-lg-block">
-            <span class="navbar-text small">
-              <i class="bi bi-graph-up"></i> 
-              <span data-i18n="totalSearches">Searches</span>: <span id="totalSearches">0</span>
+            <span class="navbar-text small hover-lift">
+              <i class="bi bi-graph-up text-success" aria-hidden="true"></i> 
+              <span data-i18n="totalSearches">Searches</span>: 
+              <span id="totalSearches" class="badge bg-success">0</span>
             </span>
           </li>
-          <!-- Language Dropdown -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="bi bi-translate"></i> EN
+          
+          <!-- Enhanced Language Dropdown -->
+          <li class="nav-item dropdown me-2">
+            <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="langDropdown" role="button" 
+               data-bs-toggle="dropdown" aria-expanded="false" 
+               title="Select application language">
+              <i class="bi bi-translate me-1" aria-hidden="true"></i> 
+              <span id="currentLangFlag">🇺🇸</span>
+              <span id="currentLangCode" class="ms-1">EN</span>
             </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="langDropdown">
-              <a class="dropdown-item" href="#" data-locale="en">🇺🇸 English</a>
-              <a class="dropdown-item" href="#" data-locale="pl">🇵🇱 Polski</a>
-              <a class="dropdown-item" href="#" data-locale="de">🇩🇪 Deutsch</a>
-              <a class="dropdown-item" href="#" data-locale="fr">🇫🇷 Français</a>
-              <a class="dropdown-item" href="#" data-locale="es">🇪🇸 Español</a>
-              <a class="dropdown-item" href="#" data-locale="it">🇮🇹 Italiano</a>
-              <a class="dropdown-item" href="#" data-locale="nl">🇳🇱 Nederlands</a>
-              <a class="dropdown-item" href="#" data-locale="ru">🇷🇺 Русский</a>
-              <a class="dropdown-item" href="#" data-locale="zh">🇨🇳 中文</a>
+            <div class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="langDropdown" style="min-width: 250px; border-radius: 12px;">
+              <div class="dropdown-header bg-primary text-white d-flex align-items-center" style="border-radius: 12px 12px 0 0; padding: 12px 16px;">
+                <i class="bi bi-globe2 me-2"></i>
+                <span data-i18n="language" class="fw-semibold">Language</span>
+              </div>
+              <div class="py-2">
+                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="en" data-flag="🇺🇸">
+                  <span class="me-3 fs-5">🇺🇸</span>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">English</div>
+                    <small class="text-muted">United States</small>
+                  </div>
+                  <small class="text-muted fw-bold">EN</small>
+                </a>
+                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="pl" data-flag="🇵🇱">
+                  <span class="me-3 fs-5">🇵🇱</span>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Polski</div>
+                    <small class="text-muted">Polska</small>
+                  </div>
+                  <small class="text-muted fw-bold">PL</small>
+                </a>
+                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="de" data-flag="🇩🇪">
+                  <span class="me-3 fs-5">��</span>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Deutsch</div>
+                    <small class="text-muted">Deutschland</small>
+                  </div>
+                  <small class="text-muted fw-bold">DE</small>
+                </a>
+                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="fr" data-flag="🇫🇷">
+                  <span class="me-3 fs-5">🇫🇷</span>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Français</div>
+                    <small class="text-muted">France</small>
+                  </div>
+                  <small class="text-muted fw-bold">FR</small>
+                </a>
+                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="es" data-flag="🇪🇸">
+                  <span class="me-3 fs-5">🇪🇸</span>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Español</div>
+                    <small class="text-muted">España</small>
+                  </div>
+                  <small class="text-muted fw-bold">ES</small>
+                </a>
+                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="it" data-flag="🇮🇹">
+                  <span class="me-3 fs-5">🇮🇹</span>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Italiano</div>
+                    <small class="text-muted">Italia</small>
+                  </div>
+                  <small class="text-muted fw-bold">IT</small>
+                </a>
+                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="nl" data-flag="��">
+                  <span class="me-3 fs-5">🇳🇱</span>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Nederlands</div>
+                    <small class="text-muted">Nederland</small>
+                  </div>
+                  <small class="text-muted fw-bold">NL</small>
+                </a>
+                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="ru" data-flag="🇷🇺">
+                  <span class="me-3 fs-5">��</span>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Русский</div>
+                    <small class="text-muted">Россия</small>
+                  </div>
+                  <small class="text-muted fw-bold">RU</small>
+                </a>
+                <a class="dropdown-item language-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-locale="zh" data-flag="🇨🇳">
+                  <span class="me-3 fs-5">🇨🇳</span>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">中文</div>
+                    <small class="text-muted">中国</small>
+                  </div>
+                  <small class="text-muted fw-bold">ZH</small>
+                </a>
+              </div>
             </div>
           </li>
-          <!-- Theme Toggle -->
-          <li class="nav-item">
-            <a class="nav-link" href="#" id="themeToggle" title="Toggle theme">
-              <i class="bi bi-moon"></i>
+          
+          <!-- Enhanced Theme Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="themeDropdown" role="button" 
+               data-bs-toggle="dropdown" aria-expanded="false" 
+               title="Switch theme">
+              <i class="bi bi-circle-half me-1" aria-hidden="true"></i>
+              <span class="ms-1">Auto</span>
             </a>
+            <div class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="themeDropdown" style="min-width: 200px; border-radius: 12px;">
+              <div class="dropdown-header bg-secondary text-white d-flex align-items-center" style="border-radius: 12px 12px 0 0; padding: 12px 16px;">
+                <i class="bi bi-palette me-2"></i>
+                <span class="fw-semibold">Theme</span>
+              </div>
+              <div class="py-2">
+                <a class="dropdown-item theme-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-theme="light">
+                  <i class="bi bi-sun me-3 fs-5"></i>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Light</div>
+                  </div>
+                  <i class="bi bi-check theme-check text-success" style="display: none;"></i>
+                </a>
+                <a class="dropdown-item theme-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1" href="#" data-theme="dark">
+                  <i class="bi bi-moon me-3 fs-5"></i>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Dark</div>
+                  </div>
+                  <i class="bi bi-check theme-check text-success" style="display: none;"></i>
+                </a>
+                <a class="dropdown-item theme-option d-flex align-items-center py-3 px-3 rounded-3 mx-2 mb-1 active" href="#" data-theme="auto">
+                  <i class="bi bi-circle-half me-3 fs-5"></i>
+                  <div class="flex-fill">
+                    <div class="fw-semibold">Auto</div>
+                  </div>
+                  <i class="bi bi-check theme-check text-success"></i>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+                    <small class="text-muted">France</small>
+                  </div>
+                  <small class="text-muted font-weight-bold">FR</small>
+                </a>
+                <a class="dropdown-item hover-lift d-flex align-items-center py-2 px-3 language-option" href="#" data-locale="es" data-flag="🇪🇸">
+                  <span class="mr-3" style="font-size: 1.2em;">🇪🇸</span>
+                  <div class="d-flex flex-column flex-grow-1">
+                    <span class="font-weight-medium">Español</span>
+                    <small class="text-muted">España</small>
+                  </div>
+                  <small class="text-muted font-weight-bold">ES</small>
+                </a>
+                <a class="dropdown-item hover-lift d-flex align-items-center py-2 px-3 language-option" href="#" data-locale="it" data-flag="🇮🇹">
+                  <span class="mr-3" style="font-size: 1.2em;">🇮🇹</span>
+                  <div class="d-flex flex-column flex-grow-1">
+                    <span class="font-weight-medium">Italiano</span>
+                    <small class="text-muted">Italia</small>
+                  </div>
+                  <small class="text-muted font-weight-bold">IT</small>
+                </a>
+                <a class="dropdown-item hover-lift d-flex align-items-center py-2 px-3 language-option" href="#" data-locale="nl" data-flag="🇳🇱">
+                  <span class="mr-3" style="font-size: 1.2em;">🇳🇱</span>
+                  <div class="d-flex flex-column flex-grow-1">
+                    <span class="font-weight-medium">Nederlands</span>
+                    <small class="text-muted">Nederland</small>
+                  </div>
+                  <small class="text-muted font-weight-bold">NL</small>
+                </a>
+                <a class="dropdown-item hover-lift d-flex align-items-center py-2 px-3 language-option" href="#" data-locale="ru" data-flag="🇷🇺">
+                  <span class="mr-3" style="font-size: 1.2em;">🇷🇺</span>
+                  <div class="d-flex flex-column flex-grow-1">
+                    <span class="font-weight-medium">Русский</span>
+                    <small class="text-muted">Россия</small>
+                  </div>
+                  <small class="text-muted font-weight-bold">RU</small>
+                </a>
+                <a class="dropdown-item hover-lift d-flex align-items-center py-2 px-3 language-option" href="#" data-locale="zh" data-flag="🇨🇳">
+                  <span class="mr-3" style="font-size: 1.2em;">🇨🇳</span>
+                  <div class="d-flex flex-column flex-grow-1">
+                    <span class="font-weight-medium">中文</span>
+                    <small class="text-muted">中国</small>
+                  </div>
+                  <small class="text-muted font-weight-bold">ZH</small>
+                </a>
+              </div>
+            </div>
+          </li>
+          <!-- Enhanced Theme Toggle -->
+          <li class="nav-item dropdown">
+            <a class="nav-link hover-scale position-relative d-flex align-items-center" href="#" id="themeDropdown" role="button" 
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+               title="Change theme" aria-label="Theme options">
+              <i class="bi bi-moon" id="themeIcon" aria-hidden="true"></i>
+              <span class="sr-only">Theme toggle</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 p-0" aria-labelledby="themeDropdown" style="min-width: 180px; border-radius: 8px;">
+              <div class="dropdown-header bg-secondary text-white d-flex align-items-center" style="border-radius: 8px 8px 0 0;">
+                <i class="bi bi-palette mr-2"></i>
+                <span data-i18n="theme">Theme</span>
+              </div>
+              <div class="py-1">
+                <a class="dropdown-item hover-lift d-flex align-items-center py-2 px-3 theme-option" href="#" data-theme="light">
+                  <i class="bi bi-sun mr-3 text-warning"></i>
+                  <span data-i18n="light_theme">Light</span>
+                  <i class="bi bi-check ml-auto text-success theme-check" style="display: none;"></i>
+                </a>
+                <a class="dropdown-item hover-lift d-flex align-items-center py-2 px-3 theme-option" href="#" data-theme="dark">
+                  <i class="bi bi-moon mr-3 text-info"></i>
+                  <span data-i18n="dark_theme">Dark</span>
+                  <i class="bi bi-check ml-auto text-success theme-check" style="display: none;"></i>
+                </a>
+                <a class="dropdown-item hover-lift d-flex align-items-center py-2 px-3 theme-option" href="#" data-theme="auto">
+                  <i class="bi bi-circle-half mr-3 text-primary"></i>
+                  <span data-i18n="auto_theme">Auto</span>
+                  <i class="bi bi-check ml-auto text-success theme-check" style="display: none;"></i>
+                </a>
+              </div>
+            </div>
           </li>
           <!-- Fullscreen Toggle -->
           <li class="nav-item d-none d-md-block">
-            <a class="nav-link" href="#" id="fullscreenToggle" title="Toggle fullscreen">
-              <i class="bi bi-fullscreen"></i>
+            <a class="nav-link hover-scale" href="#" id="fullscreenToggle" 
+               title="Toggle fullscreen mode" aria-label="Fullscreen toggle">
+              <i class="bi bi-fullscreen" id="fullscreenIcon" aria-hidden="true"></i>
+              <span class="sr-only">Toggle fullscreen</span>
             </a>
+          </li>
+          <!-- Quick Actions -->
+          <li class="nav-item dropdown d-none d-lg-block">
+            <a class="nav-link dropdown-toggle hover-scale" href="#" id="quickActionsDropdown" role="button" 
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+               title="Quick actions menu">
+              <i class="bi bi-lightning" aria-hidden="true"></i>
+              <span class="sr-only">Quick actions</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow border-0" aria-labelledby="quickActionsDropdown">
+              <h6 class="dropdown-header">
+                <i class="bi bi-lightning me-1"></i>
+                Quick Actions
+              </h6>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item hover-lift" href="#" onclick="app.clearAll()">
+                <i class="bi bi-trash me-2 text-danger"></i>
+                <span data-i18n="clearAllData">Clear All Data</span>
+              </a>
+              <a class="dropdown-item hover-lift" href="#" onclick="app.exportHistory()">
+                <i class="bi bi-download me-2 text-primary"></i>
+                <span data-i18n="export">Export History</span>
+              </a>
+              <a class="dropdown-item hover-lift" href="#" onclick="app.showSamples()">
+                <i class="bi bi-play me-2 text-success"></i>
+                <span data-i18n="sample">Sample Data</span>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item hover-lift" href="#" onclick="app.showAbout()">
+                <i class="bi bi-info-circle me-2 text-info"></i>
+                <span data-i18n="aboutApp">About App</span>
+              </a>
+            </div>
           </li>
         </ul>
       </div>
@@ -189,138 +631,389 @@
 
     <div class="container-fluid py-4">
       <!-- Alerts -->
-      <div id="alertContainer"></div>
+      <div id="alertContainer" class="mb-3"></div>
 
-      <!-- Progress Bar -->
+      <!-- Enhanced Progress Bar -->
       <div id="progressContainer" class="mb-3" style="display: none;">
-        <div class="progress">
-          <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-            <span class="sr-only">Progress</span>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <small class="text-muted">
+            <i class="bi bi-hourglass-split me-1"></i>
+            <span id="progressText">Processing...</span>
+          </small>
+          <small class="text-muted">
+            <span id="progressPercent">0%</span>
+          </small>
+        </div>
+        <div class="progress" style="height: 8px;">
+          <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" 
+               role="progressbar" style="width: 0%" 
+               aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-1">
+          <small class="text-muted" id="progressStats">0 of 0 processed</small>
+          <button class="btn btn-sm btn-outline-warning" id="progressCancel" style="display: none;">
+            <i class="bi bi-x-circle me-1"></i>
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <!-- Status Indicators -->
+      <div id="statusContainer" class="mb-3" style="display: none;">
+        <div class="row">
+          <div class="col-md-3 col-6">
+            <div class="card border-0 bg-light text-center hover-lift">
+              <div class="card-body py-2">
+                <i class="bi bi-check-circle text-success fs-4"></i>
+                <div class="mt-1">
+                  <span class="h6 mb-0" id="successCount">0</span>
+                  <div class="small text-muted" data-i18n="success">Success</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="card border-0 bg-light text-center hover-lift">
+              <div class="card-body py-2">
+                <i class="bi bi-x-circle text-danger fs-4"></i>
+                <div class="mt-1">
+                  <span class="h6 mb-0" id="errorCount">0</span>
+                  <div class="small text-muted" data-i18n="error">Errors</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="card border-0 bg-light text-center hover-lift">
+              <div class="card-body py-2">
+                <i class="bi bi-clock text-warning fs-4"></i>
+                <div class="mt-1">
+                  <span class="h6 mb-0" id="processingTime">0s</span>
+                  <div class="small text-muted">Time</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="card border-0 bg-light text-center hover-lift">
+              <div class="card-body py-2">
+                <i class="bi bi-speedometer2 text-info fs-4"></i>
+                <div class="mt-1">
+                  <span class="h6 mb-0" id="processingRate">0/s</span>
+                  <div class="small text-muted">Rate</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Single Lookup -->
-      <div data-tab-content="single" role="tabpanel" aria-labelledby="single-tab">
+      <!-- Enhanced Single Lookup -->
+      <div data-tab-content="single" role="tabpanel" aria-labelledby="single-tab" style="display: block;">
         <div class="row mb-4">
           <div class="col-12">
-            <h4 class="mb-3"><i class="bi bi-search"></i> <span data-i18n="singleLookup">Single Lookup</span></h4>
-            <p class="text-muted" data-i18n="singleLookupDesc">Enter a ZIP code to find its city, or a city name to find postal codes.</p>
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <h4 class="mb-2 fw-bold">
+                  <i class="bi bi-search text-primary me-2"></i> 
+                  <span data-i18n="singleLookup">Single Lookup</span>
+                </h4>
+                <p class="text-muted mb-0" data-i18n="singleLookupDesc">
+                  Enter a ZIP code to find its city, or a city name to find postal codes.
+                </p>
+              </div>
+              <div class="text-end">
+                <span class="badge bg-info bg-opacity-10 text-info fs-6 px-3 py-2">
+                  <i class="bi bi-lightning-charge me-1"></i>
+                  Instant Search
+                </span>
+              </div>
+            </div>
           </div>
         </div>
         
-        <div class="row">
-          <div class="col-lg-6 mb-3">
-            <label for="zipInput" class="form-label font-weight-bold">
-              <i class="bi bi-envelope-fill text-primary"></i> <span data-i18n="zipCode">ZIP Code</span>
-            </label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text bg-primary text-white">
-                  <i class="bi bi-envelope" aria-hidden="true"></i>
-                </span>
-              </div>
-              <input 
-                id="zipInput"
-                type="text" 
-                class="form-control" 
-                data-i18n-placeholder="zipPlaceholder"
-                placeholder="00-001 or 00001"
-                autofocus 
-                autocomplete="postal-code"
-                maxlength="6"
-                pattern="^\d{2}-?\d{3}$"
-              />
-              <div class="input-group-append">
-                <button 
-                  id="zipLookupBtn"
-                  class="btn btn-primary" 
-                  data-loading="lookupCity"
-                  title="Lookup city for this ZIP code"
-                >
-                  <span data-i18n="lookupCity">Lookup City</span>
-                </button>
-                <button 
-                  id="clearZipBtn"
-                  class="btn btn-outline-secondary" 
-                  title="Clear ZIP input"
-                >
-                  <i class="bi bi-x-circle" aria-hidden="true"></i>
-                </button>
+        <div class="row g-4">
+          <!-- Enhanced ZIP Code Input -->
+          <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100 hover-lift">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="rounded-circle bg-primary bg-opacity-10 p-2 me-3">
+                    <i class="bi bi-envelope-fill text-primary fs-5"></i>
+                  </div>
+                  <div>
+                    <label for="zipInput" class="form-label fw-bold mb-0">
+                      <span data-i18n="zipCode">ZIP Code</span>
+                    </label>
+                    <div class="small text-muted" data-i18n="zipHelp">Format: 00-001 or 00001</div>
+                  </div>
+                </div>
+                
+                <div class="input-group input-group-lg mb-3">
+                  <span class="input-group-text bg-primary text-white border-0">
+                    <i class="bi bi-envelope" aria-hidden="true"></i>
+                  </span>
+                  <input 
+                    id="zipInput"
+                    type="text" 
+                    class="form-control border-0 shadow-sm" 
+                    data-i18n-placeholder="zipPlaceholder"
+                    placeholder="00-001 or 00001"
+                    autofocus 
+                    autocomplete="postal-code"
+                    maxlength="6"
+                    pattern="^\d{2}-?\d{3}$"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Enter Polish ZIP code"
+                 >
+                  <button 
+                    id="clearZipBtn"
+                    class="btn btn-outline-secondary border-0" 
+                    type="button"
+                    title="Clear ZIP input"
+                  >
+                    <i class="bi bi-x-circle" aria-hidden="true"></i>
+                  </button>
+                </div>
+                
+                <div class="d-grid gap-2">
+                  <button 
+                    id="zipLookupBtn"
+                    class="btn btn-primary btn-lg hover-lift shadow-sm" 
+                    data-loading="lookupCity"
+                    title="Lookup city for this ZIP code"
+                  >
+                    <i class="bi bi-search me-2"></i>
+                    <span data-i18n="lookupCity">Lookup City</span>
+                    <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                  </button>
+                </div>
+                
+                <!-- ZIP Code Examples -->
+                <div class="mt-3">
+                  <div class="small text-muted mb-2">
+                    <i class="bi bi-lightbulb me-1"></i>
+                    <strong>Examples:</strong>
+                  </div>
+                  <div class="d-flex flex-wrap gap-1">
+                    <button class="btn btn-outline-primary btn-sm zip-example" data-zip="00-001">00-001</button>
+                    <button class="btn btn-outline-primary btn-sm zip-example" data-zip="31-000">31-000</button>
+                    <button class="btn btn-outline-primary btn-sm zip-example" data-zip="80-001">80-001</button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="form-text" data-i18n="zipHelp">Format: 00-001 or 00001</div>
           </div>
           
-          <div class="col-lg-6 mb-3">
-            <label for="cityInput" class="form-label font-weight-bold">
-              <i class="bi bi-geo-alt-fill text-success"></i> <span data-i18n="cityName">City Name</span>
-            </label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text bg-success text-white">
-                  <i class="bi bi-geo-alt" aria-hidden="true"></i>
-                </span>
-              </div>
-              <input 
-                id="cityInput"
-                type="text" 
-                class="form-control" 
-                data-i18n-placeholder="cityPlaceholder"
-                placeholder="Warszawa"
-                autocomplete="address-level2"
-                list="citySuggestions"
-              />
-              <datalist id="citySuggestions"></datalist>
-              <div class="input-group-append">
-                <button 
-                  id="cityLookupBtn"
-                  class="btn btn-success" 
-                  data-loading="lookupZip"
-                  title="Lookup ZIP codes for this city"
-                >
-                  <span data-i18n="lookupZip">Lookup ZIP</span>
-                </button>
-                <button 
-                  id="clearCityBtn"
-                  class="btn btn-outline-secondary" 
-                  title="Clear city input"
-                >
-                  <i class="bi bi-x-circle" aria-hidden="true"></i>
-                </button>
+          <!-- Enhanced City Input -->
+          <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100 hover-lift">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="rounded-circle bg-success bg-opacity-10 p-2 me-3">
+                    <i class="bi bi-geo-alt-fill text-success fs-5"></i>
+                  </div>
+                  <div>
+                    <label for="cityInput" class="form-label fw-bold mb-0">
+                      <span data-i18n="cityName">City Name</span>
+                    </label>
+                    <div class="small text-muted" data-i18n="cityHelp">Enter Polish city name</div>
+                  </div>
+                </div>
+                
+                <div class="input-group input-group-lg mb-3">
+                  <span class="input-group-text bg-success text-white border-0">
+                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                  </span>
+                  <input 
+                    id="cityInput"
+                    type="text" 
+                    class="form-control border-0 shadow-sm" 
+                    data-i18n-placeholder="cityPlaceholder"
+                    placeholder="Warszawa"
+                    autocomplete="address-level2"
+                    list="citySuggestions"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Enter Polish city name"
+                 >
+                  <datalist id="citySuggestions"></datalist>
+                  <button 
+                    id="clearCityBtn"
+                    class="btn btn-outline-secondary border-0" 
+                    type="button"
+                    title="Clear city input"
+                  >
+                    <i class="bi bi-x-circle" aria-hidden="true"></i>
+                  </button>
+                </div>
+                
+                <div class="d-grid gap-2">
+                  <button 
+                    id="cityLookupBtn"
+                    class="btn btn-success btn-lg hover-lift shadow-sm" 
+                    data-loading="lookupZip"
+                    title="Lookup ZIP codes for this city"
+                  >
+                    <i class="bi bi-search me-2"></i>
+                    <span data-i18n="lookupZip">Lookup ZIP</span>
+                    <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                  </button>
+                </div>
+                
+                <!-- City Examples -->
+                <div class="mt-3">
+                  <div class="small text-muted mb-2">
+                    <i class="bi bi-lightbulb me-1"></i>
+                    <strong>Examples:</strong>
+                  </div>
+                  <div class="d-flex flex-wrap gap-1">
+                    <button class="btn btn-outline-success btn-sm city-example" data-city="Warszawa">Warszawa</button>
+                    <button class="btn btn-outline-success btn-sm city-example" data-city="Kraków">Kraków</button>
+                    <button class="btn btn-outline-success btn-sm city-example" data-city="Gdańsk">Gdańsk</button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="form-text" data-i18n="cityHelp">Enter Polish city name</div>
           </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="row mb-3">
+        <!-- Enhanced Quick Actions -->
+        <div class="row mt-4">
           <div class="col-12">
-            <div class="btn-toolbar justify-content-between" role="toolbar">
-              <div class="btn-group" role="group" aria-label="Quick actions">
-                <button id="swapInputsBtn" class="btn btn-outline-info btn-sm" title="Swap inputs">
-                  <i class="bi bi-arrow-left-right"></i> <span data-i18n="swap">Swap</span>
-                </button>
-                <button id="randomSampleBtn" class="btn btn-outline-secondary btn-sm" title="Try random sample">
-                  <i class="bi bi-shuffle"></i> <span data-i18n="sample">Sample</span>
-                </button>
-              </div>
-              <div class="btn-group" role="group" aria-label="Result actions">
-                <button 
-                  id="clearResultsBtn"
-                  class="btn btn-outline-danger btn-sm" 
-                  style="display: none;"
-                  title="Clear all results"
-                >
-                  <i class="bi bi-trash" aria-hidden="true"></i> <span data-i18n="clearResults">Clear Results</span>
-                </button>
+            <div class="card border-0 bg-light">
+              <div class="card-body py-3">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                  <div class="d-flex flex-wrap gap-2">
+                    <button id="swapInputsBtn" class="btn btn-outline-info hover-lift" title="Swap inputs">
+                      <i class="bi bi-arrow-left-right me-1"></i> 
+                      <span data-i18n="swap">Swap</span>
+                    </button>
+                    <button id="randomSampleBtn" class="btn btn-outline-secondary hover-lift" title="Try random sample">
+                      <i class="bi bi-shuffle me-1"></i> 
+                      <span data-i18n="sample">Sample</span>
+                    </button>
+                    <button class="btn btn-outline-warning hover-lift" id="validateInputBtn" title="Validate current input">
+                      <i class="bi bi-check-circle me-1"></i>
+                      <span data-i18n="validate">Validate</span>
+                    </button>
+                  </div>
+                  <div class="d-flex flex-wrap gap-2">
+                    <button 
+                      id="clearResultsBtn"
+                      class="btn btn-outline-danger hover-lift" 
+                      style="display: none;"
+                      title="Clear all results"
+                    >
+                      <i class="bi bi-trash me-1" aria-hidden="true"></i> 
+                      <span data-i18n="clearResults">Clear Results</span>
+                    </button>
+                    <button class="btn btn-outline-primary hover-lift" id="exportResultsBtn" style="display: none;" title="Export results">
+                      <i class="bi bi-download me-1"></i>
+                      <span data-i18n="export">Export</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
         
-        <div id="resultsTable" style="display: none;"></div>
+        <!-- Enhanced Results Section -->
+        <div id="resultsSection" style="display: none;" class="mt-4">
+          <div class="card border-0 shadow-lg">
+            <div class="card-header bg-transparent border-0 py-3">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h5 class="card-title mb-1 fw-bold text-success">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <span data-i18n="search_results">Search Results</span>
+                  </h5>
+                  <div class="small text-muted" id="resultsMetadata">Found 0 results</div>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-primary hover-lift" id="sortResultsBtn" title="Sort results">
+                    <i class="bi bi-sort-alpha-down me-1"></i>
+                    <span data-i18n="sort">Sort</span>
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary hover-lift" id="filterResultsBtn" title="Filter results">
+                    <i class="bi bi-funnel me-1"></i>
+                    <span data-i18n="filter">Filter</span>
+                  </button>
+                  <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-info dropdown-toggle hover-lift" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Export options">
+                      <i class="bi bi-download me-1"></i>
+                      <span data-i18n="export">Export</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                      <li><a class="dropdown-item" href="#" id="exportCSV"><i class="bi bi-filetype-csv me-2"></i>CSV</a></li>
+                      <li><a class="dropdown-item" href="#" id="exportJSON"><i class="bi bi-filetype-json me-2"></i>JSON</a></li>
+                      <li><a class="dropdown-item" href="#" id="exportPDF"><i class="bi bi-filetype-pdf me-2"></i>PDF</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="#" id="copyToClipboard"><i class="bi bi-clipboard me-2"></i>Copy to Clipboard</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-body p-0">
+              <!-- Results Filter Bar -->
+              <div id="resultsFilter" class="p-3 bg-light border-bottom" style="display: none;">
+                <div class="row g-2 align-items-end">
+                  <div class="col-md-3">
+                    <label class="form-label small fw-bold">Filter by</label>
+                    <select class="form-select form-select-sm" id="filterField">
+                      <option value="">All fields</option>
+                      <option value="zip">ZIP Code</option>
+                      <option value="city">City</option>
+                      <option value="voivodeship">Voivodeship</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Search term</label>
+                    <input type="text" class="form-control form-control-sm" id="filterTerm" placeholder="Enter search term...">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label small fw-bold">Sort by</label>
+                    <select class="form-select form-select-sm" id="sortField">
+                      <option value="zip">ZIP Code</option>
+                      <option value="city">City Name</option>
+                      <option value="voivodeship">Voivodeship</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="d-grid gap-1">
+                      <button class="btn btn-primary btn-sm" id="applyFilter">Apply</button>
+                      <button class="btn btn-outline-secondary btn-sm" id="clearFilter">Clear</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Results Table Container -->
+              <div id="resultsTable" class="table-responsive">
+                <!-- Dynamic table content will be inserted here -->
+              </div>
+              
+              <!-- Results Pagination -->
+              <div id="resultsPagination" class="p-3 border-top bg-light" style="display: none;">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="small text-muted">
+                    Showing <span id="resultsRange">0-0</span> of <span id="resultsTotal">0</span> results
+                  </div>
+                  <nav aria-label="Results pagination">
+                    <ul class="pagination pagination-sm mb-0" id="paginationList">
+                      <!-- Pagination items will be generated dynamically -->
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Batch Lookup -->
@@ -872,7 +1565,7 @@
 
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
   <!-- Translation System -->
@@ -892,10 +1585,47 @@
   
   <!-- Initialize Translation Manager -->
   <script>
-    // Initialize the translation manager when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function() {
-      window.translationManager = new TranslationManager();
-      window.translationManager.autoDetectLanguage();
+    // Initialize the translation manager immediately
+    window.translationManager = new TranslationManager();
+    
+    // Load English as default and then initialize the app
+    window.translationManager.loadTranslation('en').then(() => {
+      window.translationManager.currentLanguage = 'en';
+      console.log('Default language (en) loaded');
+      
+      // Initialize the Polish ZIP Lookup app after translations are ready
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, initializing app...');
+        
+        // Initialize the main application
+        try {
+          window.app = new PolishZipLookup();
+          console.log('App initialized successfully:', window.app);
+        } catch (error) {
+          console.error('Failed to initialize app:', error);
+        }
+        
+        // Auto-detect language preference
+        window.translationManager.autoDetectLanguage().then(() => {
+          // Update the app's locale to match detected language
+          if (window.app) {
+            window.app.state.locale = window.translationManager.currentLanguage;
+            window.app.updateUI();
+            console.log('App locale updated to:', window.translationManager.currentLanguage);
+          }
+        });
+      });
+    }).catch((error) => {
+      console.error('Failed to load default translations:', error);
+      // Still try to initialize the app even if translations fail
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          window.app = new PolishZipLookup();
+          console.log('App initialized with fallback');
+        } catch (error) {
+          console.error('Failed to initialize app with fallback:', error);
+        }
+      });
     });
   </script>
 </body>

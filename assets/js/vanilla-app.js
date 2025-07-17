@@ -1368,16 +1368,14 @@ class PolishZipLookup {
   }
 }
 
-// Initialize the application when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  window.zipLookupApp = new PolishZipLookup();
-});
-
-// Make class available for testing
+// Make class available globally and for testing
 /* eslint-disable no-undef */
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
   module.exports = PolishZipLookup;
 } else if (typeof window !== 'undefined') {
   window.PolishZipLookup = PolishZipLookup;
 }
+
+// Note: Application initialization is now handled in the HTML file
+// after translation manager is properly loaded
 /* eslint-enable no-undef */

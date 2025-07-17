@@ -86,8 +86,10 @@ class TranslationManager {
       return this.translations[this.fallbackLanguage][key];
     }
     
-    // Return key if no translation found
-    console.warn(`Translation not found: ${key} (${targetLang})`);
+    // Return key if no translation found (reduce console spam in production)
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`Translation not found: ${key} (${targetLang})`);
+    }
     return key;
   }
 

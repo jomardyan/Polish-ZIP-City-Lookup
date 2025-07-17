@@ -23,6 +23,16 @@ window.translations.en = {
   lookupCity: 'Lookup City',
   lookupZip: 'Lookup ZIP',
   
+  // Single lookup section
+  singleLookup: 'Single Lookup',
+  singleLookupDesc: 'Enter a ZIP code to find its city, or a city name to find postal codes.',
+  
+  // Form fields
+  zipCode: 'ZIP Code',
+  zipHelp: 'Format: 00-001 or 00001',
+  cityName: 'City Name',
+  cityHelp: 'Enter Polish city name',
+  
   // Actions
   clear: 'Clear',
   clearResults: 'Clear Results',
@@ -38,9 +48,11 @@ window.translations.en = {
   close: 'Close',
   minimize: 'Minimize',
   maximize: 'Maximize',
+  validate: 'Validate',
   
   // Results
   results: 'Results',
+  search_results: 'Search Results',
   input: 'Input',
   output: 'Output',
   batchResults: 'Batch Results',
@@ -128,8 +140,11 @@ window.translations.en = {
   appearance: 'Appearance',
   theme: 'Theme',
   lightTheme: 'Light',
+  light_theme: 'Light',
   darkTheme: 'Dark',
+  dark_theme: 'Dark',
   autoTheme: 'Auto (System)',
+  auto_theme: 'Auto',
   
   // Language and localization
   language: 'Language',
