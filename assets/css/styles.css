@@ -488,11 +488,22 @@ body.theme-dark {
 /* Base theme styles */
 body {
   transition: var(--transition);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
   line-height: 1.6;
   background: var(--bg-gradient-light);
   color: var(--text-primary);
   min-height: 100vh;
+}
+
+/* Ensure proper emoji flag rendering */
+#currentLangFlag,
+.language-option span:first-child,
+.dropdown-item span:first-child {
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', emoji, sans-serif;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Enhanced component styling with new color system */
