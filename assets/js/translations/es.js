@@ -20,9 +20,22 @@ if (typeof window !== 'undefined') {
     cityPlaceholder: 'Varsovia',
     lookupCity: 'Buscar Ciudad',
     lookupZip: 'Buscar Código',
+    
+    // Single lookup section
+    singleLookup: 'Búsqueda Individual',
+    singleLookupDesc: 'Ingrese un código postal para encontrar la ciudad, o un nombre de ciudad para encontrar códigos postales.',
+    
+    // Form fields
+    zipCode: 'Código Postal',
+    zipHelp: 'Formato: 00-001 o 00001',
+    cityName: 'Nombre de Ciudad',
+    cityHelp: 'Ingrese nombre de ciudad polaca',
+    
     clear: 'Limpiar',
     clearResults: 'Limpiar Resultados',
+    validate: 'Validar',
     results: 'Resultados',
+    search_results: 'Resultados de Búsqueda',
     input: 'Entrada',
     output: 'Salida',
     importFile: 'Importar CSV / Excel',

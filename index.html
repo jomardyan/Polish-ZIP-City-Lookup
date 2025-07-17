@@ -172,8 +172,8 @@
               <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="langDropdown" 
                  role="button" data-bs-toggle="dropdown" aria-expanded="false"
                  title="Select application language">
-                <span id="currentLangFlag">🇺🇸</span>
-                <span id="currentLangCode" class="ms-1">EN</span>
+                <span id="currentLangFlag">🇵🇱</span>
+                <span id="currentLangCode" class="ms-1">PL</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
                 <li><h6 class="dropdown-header">🌐 Select Language</h6></li>
@@ -1221,17 +1221,12 @@
       if (typeof TranslationManager !== 'undefined') {
         window.translationManager = new TranslationManager();
         
-        // Load default language (Polish)
+        // Set Polish as default language 
         window.translationManager.loadTranslation('pl').then(() => {
           window.translationManager.currentLanguage = 'pl';
-          console.log('Default language (pl) loaded');
-          
-          // Auto-detect and apply user language preference
-          window.translationManager.autoDetectLanguage().then(() => {
-            console.log('Language auto-detection completed');
-          }).catch((error) => {
-            console.warn('Language auto-detection failed:', error);
-          });
+          localStorage.setItem('preferred-language', 'pl');
+          window.translationManager.updateDOM();
+          console.log('Default language (pl) loaded and DOM updated');
         }).catch((error) => {
           console.error('Failed to load default translations:', error);
         });

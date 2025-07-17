@@ -176,6 +176,7 @@ body.theme-dark {
   border-radius: 8px !important;
   margin: 0 8px 4px 8px;
   background: transparent;
+  color: var(--text-primary) !important; /* Ensure text is visible */
 }
 
 .theme-option:hover {
@@ -193,6 +194,26 @@ body.theme-dark {
 
 .theme-check {
   transition: all 0.2s ease-in-out;
+}
+
+/* Ensure dropdown menus have proper text colors in light mode */
+.dropdown-menu {
+  background: var(--bg-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.dropdown-item {
+  color: var(--text-primary) !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.dropdown-header {
+  color: var(--text-primary) !important;
 }
 
 /* Enhanced Bootstrap 5 Dark Mode Components */

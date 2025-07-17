@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Test</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <div data-tab-content="single" style="display: block;">Single Content</div>
+    <div data-tab-content="settings" style="display: none;">Settings Content</div>
+    <div data-tab-content="history" style="display: none;">History Content</div>
+    <div data-tab-content="batch" style="display: none;">Batch Content</div>
+    
+    <button data-tab="single">Single</button>
+    <button data-tab="settings">Settings</button>
+    <button data-tab="history">History</button>
+    <button data-tab="batch">Batch</button>
+    
+    <script>
+        $(document).ready(function() {
+            console.log('Testing tab elements:', $('[data-tab-content]').length);
+            
+            function switchTab(tabName) {
+                console.log('switchTab called with:', tabName);
+                console.log('Available tab contents:', $('[data-tab-content]').length);
+                
+                // Hide all tab contents
+                $('[data-tab-content]').each(function() {
+                    console.log('Hiding element:', $(this).attr('data-tab-content'));
+                    $(this).css('display', 'none');
+                });
+                
+                // Show selected tab content
+                const $targetTab = $(`[data-tab-content="${tabName}"]`);
+                console.log('Target tab element:', $targetTab.length);
+                if ($targetTab.length > 0) {
+                    console.log('Showing element:', tabName);
+                    $targetTab.css('display', 'block');
+                }
+                
+                // Update navigation
+                $('[data-tab]').removeClass('active');
+                $(`[data-tab="${tabName}"]`).addClass('active');
+                
+                console.log('Tab switched to:', tabName);
+            }
+            
+            $(document).on('click', '[data-tab]', function(e) {
+                e.preventDefault();
+                const tabName = $(this).data('tab');
+                console.log('Tab clicked:', tabName);
+                switchTab(tabName);
+            });
+            
+            console.log('Debug ready');
+        });
+    </script>
+</body>
+</html>
