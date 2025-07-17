@@ -152,6 +152,7 @@ class TranslationManager {
    * Update all elements with data-i18n attributes
    */
   updateDOM() {
+    // Update elements with data-i18n attributes
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(element => {
       const key = element.getAttribute('data-i18n');
@@ -167,6 +168,14 @@ class TranslationManager {
       } else {
         element.textContent = translation;
       }
+    });
+
+    // Update elements with data-i18n-placeholder attributes
+    const placeholderElements = document.querySelectorAll('[data-i18n-placeholder]');
+    placeholderElements.forEach(element => {
+      const key = element.getAttribute('data-i18n-placeholder');
+      const translation = this.t(key);
+      element.placeholder = translation;
     });
 
     // Update meta tags for SEO

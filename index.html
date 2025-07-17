@@ -1221,20 +1221,39 @@
       if (typeof TranslationManager !== 'undefined') {
         window.translationManager = new TranslationManager();
         
-        // Load default language (Polish)
-        window.translationManager.loadTranslation('pl').then(() => {
-          window.translationManager.currentLanguage = 'pl';
-          console.log('Default language (pl) loaded');
-          
-          // Auto-detect and apply user language preference
-          window.translationManager.autoDetectLanguage().then(() => {
-            console.log('Language auto-detection completed');
+        // Check for saved language preference first
+        const savedLang = localStorage.getItem('preferred-language');
+        
+        if (savedLang) {
+          // Use saved language preference
+          window.translationManager.loadTranslation(savedLang).then(() => {
+            window.translationManager.currentLanguage = savedLang;
+            window.translationManager.updateDOM();
+            console.log('Saved language (' + savedLang + ') loaded and DOM updated');
           }).catch((error) => {
-            console.warn('Language auto-detection failed:', error);
+            console.error('Failed to load saved language:', error);
+            // Fallback to auto-detect
+            window.translationManager.autoDetectLanguage().then(() => {
+              window.translationManager.updateDOM();
+              console.log('Language auto-detection completed and DOM updated');
+            });
           });
-        }).catch((error) => {
-          console.error('Failed to load default translations:', error);
-        });
+        } else {
+          // No saved preference, load Polish as default
+          window.translationManager.loadTranslation('pl').then(() => {
+            window.translationManager.currentLanguage = 'pl';
+            localStorage.setItem('preferred-language', 'pl');
+            window.translationManager.updateDOM();
+            console.log('Default language (pl) loaded and DOM updated');
+          }).catch((error) => {
+            console.error('Failed to load default translations:', error);
+            // Fallback to auto-detect
+            window.translationManager.autoDetectLanguage().then(() => {
+              window.translationManager.updateDOM();
+              console.log('Language auto-detection completed and DOM updated');
+            });
+          });
+        }
       } else {
         console.warn('TranslationManager not available');
       }

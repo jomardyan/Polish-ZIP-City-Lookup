@@ -23,6 +23,16 @@ window.translations.fr = {
   lookupCity: 'Rechercher Ville',
   lookupZip: 'Rechercher Code',
   
+  // Single lookup section
+  singleLookup: 'Recherche Simple',
+  singleLookupDesc: 'Entrez un code postal pour trouver la ville, ou un nom de ville pour trouver les codes postaux.',
+  
+  // Form fields
+  zipCode: 'Code Postal',
+  zipHelp: 'Format: 00-001 ou 00001',
+  cityName: 'Nom de Ville',
+  cityHelp: 'Entrez un nom de ville polonaise',
+  
   // Actions
   clear: 'Effacer',
   clearResults: 'Effacer Résultats',
@@ -38,9 +48,11 @@ window.translations.fr = {
   close: 'Fermer',
   minimize: 'Minimiser',
   maximize: 'Maximiser',
+  validate: 'Valider',
   
   // Results
   results: 'Résultats',
+  search_results: 'Résultats de Recherche',
   input: 'Entrée',
   output: 'Sortie',
   batchResults: 'Résultats Lot',

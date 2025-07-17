@@ -23,6 +23,16 @@ window.translations.de = {
   lookupCity: 'Stadt suchen',
   lookupZip: 'PLZ suchen',
   
+  // Single lookup section
+  singleLookup: 'Einzelne Suche',
+  singleLookupDesc: 'Geben Sie eine Postleitzahl ein, um die Stadt zu finden, oder einen Stadtnamen, um Postleitzahlen zu finden.',
+  
+  // Form fields
+  zipCode: 'Postleitzahl',
+  zipHelp: 'Format: 00-001 oder 00001',
+  cityName: 'Stadtname',
+  cityHelp: 'Polnischen Stadtnamen eingeben',
+  
   // Actions
   clear: 'Löschen',
   clearResults: 'Ergebnisse löschen',
@@ -38,9 +48,11 @@ window.translations.de = {
   close: 'Schließen',
   minimize: 'Minimieren',
   maximize: 'Maximieren',
+  validate: 'Validieren',
   
   // Results
   results: 'Ergebnisse',
+  search_results: 'Suchergebnisse',
   input: 'Eingabe',
   output: 'Ausgabe',
   batchResults: 'Stapel-Ergebnisse',
