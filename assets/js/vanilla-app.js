@@ -35,6 +35,46 @@ class PolishZipLookup {
     this.init();
   }
 
+  // Initialize custom dropdown functionality (Bootstrap-independent)
+  initializeBootstrapComponents() {
+    // Implement custom dropdown functionality
+    this.initializeCustomDropdowns();
+  }
+
+  initializeCustomDropdowns() {
+    // Custom dropdown implementation
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Close all other dropdowns
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          if (menu !== toggle.nextElementSibling) {
+            menu.classList.remove('show');
+          }
+        });
+        
+        // Toggle this dropdown
+        const menu = toggle.nextElementSibling;
+        if (menu && menu.classList.contains('dropdown-menu')) {
+          menu.classList.toggle('show');
+        }
+      });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          menu.classList.remove('show');
+        });
+      }
+    });
+
+    console.log('Custom dropdowns initialized'); // eslint-disable-line no-console
+  }
+
   getDefaultSettings() {
     return {
       theme: 'light',
@@ -69,6 +109,7 @@ class PolishZipLookup {
     this.setupEventListeners();
     this.initializeMap();
     this.setupDragAndDrop();
+    this.initializeBootstrapComponents(); // Add Bootstrap initialization
     this.updateUI();
     this.updateStats();
   }
@@ -87,6 +128,112 @@ class PolishZipLookup {
     
     const translations = basicTranslations[this.state.locale] || basicTranslations['en'];
     return translations[key] || key;
+  }
+
+  setLanguage(locale) {
+    this.state.locale = locale;
+    this.state.settings.language = locale;
+    
+    // Use TranslationManager if available
+    if (window.translationManager && typeof window.translationManager.setLanguage === 'function') {
+      window.translationManager.setLanguage(locale).then(() => {
+        window.translationManager.updateDOM();
+        this.updateLanguageDropdown(locale);
+        this.savePreferences();
+        this.showSuccess('Language changed to ' + locale.toUpperCase());
+      });
+    } else {
+      this.updateLanguageDropdown(locale);
+      this.savePreferences();
+      this.showSuccess('Language changed to ' + locale.toUpperCase());
+    }
+    
+    // Update HTML lang attribute
+    document.documentElement.lang = locale;
+    this.updateUI();
+  }
+
+  setTheme(theme) {
+    this.state.theme = theme;
+    this.state.settings.theme = theme;
+    
+    // Apply theme
+    const body = document.body;
+    body.className = body.className.replace(/theme-\w+/g, '');
+    
+    if (theme === 'light') {
+      body.classList.add('theme-light');
+      body.setAttribute('data-theme', 'light');
+    } else if (theme === 'dark') {
+      body.classList.add('theme-dark');
+      body.setAttribute('data-theme', 'dark');
+    } else {
+      // Auto theme - use system preference
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (systemPrefersDark) {
+        body.classList.add('theme-dark');
+        body.setAttribute('data-theme', 'dark');
+      } else {
+        body.classList.add('theme-light');
+        body.setAttribute('data-theme', 'light');
+      }
+    }
+    
+    this.updateThemeDropdown(theme);
+    this.savePreferences();
+    this.updateUI();
+    this.showSuccess('Theme changed to ' + theme);
+  }
+
+  updateLanguageDropdown(activeLang) {
+    const languageOptions = document.querySelectorAll('.language-option');
+    
+    // Remove active state from all options
+    languageOptions.forEach(option => {
+      option.classList.remove('active');
+    });
+    
+    // Add active state to selected option
+    const activeOption = document.querySelector(`.language-option[data-locale="${activeLang}"]`);
+    if (activeOption) {
+      activeOption.classList.add('active');
+      
+      // Update navbar language display
+      const flagIcon = activeOption.querySelector('span').textContent;
+      const langCode = activeLang.toUpperCase();
+      
+      document.getElementById('currentLangFlag').textContent = flagIcon;
+      document.getElementById('currentLangCode').textContent = langCode;
+    }
+  }
+
+  updateThemeDropdown(activeTheme) {
+    const themeButton = document.querySelector('#themeDropdown');
+    const themeOptions = document.querySelectorAll('.theme-option');
+    
+    // Remove active state from all options
+    themeOptions.forEach(option => {
+      option.classList.remove('active');
+      const check = option.querySelector('.theme-check');
+      if (check) check.style.display = 'none';
+    });
+    
+    // Add active state to selected option
+    const activeOption = document.querySelector(`.theme-option[data-theme="${activeTheme}"]`);
+    if (activeOption) {
+      activeOption.classList.add('active');
+      const check = activeOption.querySelector('.theme-check');
+      if (check) check.style.display = 'inline';
+      
+      // Update button text and icon
+      const optionIcon = activeOption.querySelector('i').className;
+      const optionText = activeOption.querySelector('.fw-semibold').textContent;
+      
+      themeButton.innerHTML = `
+        <i class="${optionIcon} me-1"></i>
+        <span class="ms-1">${optionText}</span>
+      `;
+    }
   }
 
   loadPreferences() {
@@ -283,30 +430,26 @@ class PolishZipLookup {
       });
     });
 
-    // Language switching
-    document.querySelectorAll('[data-locale]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    // Language switching - Updated for Bootstrap dropdown
+    document.querySelectorAll('.language-option').forEach(option => {
+      option.addEventListener('click', (e) => {
         e.preventDefault();
-        const localeElement = e.target.closest('[data-locale]') || e.target;
-        const locale = localeElement.dataset.locale;
+        const locale = e.target.closest('.language-option').dataset.locale;
         if (locale) {
-          this.state.locale = locale;
-          this.state.settings.language = locale;
-          this.savePreferences();
-          this.updateUI();
-          this.showSuccess('Language changed');
+          this.setLanguage(locale);
         }
       });
     });
 
-    // Theme toggle
-    document.getElementById('themeToggle')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.state.theme = this.state.theme === 'light' ? 'dark' : 'light';
-      this.state.settings.theme = this.state.theme;
-      this.savePreferences();
-      this.updateUI();
-      this.showSuccess('Theme changed');
+    // Theme switching - Updated for Bootstrap dropdown
+    document.querySelectorAll('.theme-option').forEach(option => {
+      option.addEventListener('click', (e) => {
+        e.preventDefault();
+        const theme = e.target.closest('.theme-option').dataset.theme;
+        if (theme) {
+          this.setTheme(theme);
+        }
+      });
     });
 
     // Fullscreen toggle

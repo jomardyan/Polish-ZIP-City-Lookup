@@ -41,464 +41,26 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📮</text></svg>">
   
   <!-- Preload critical resources -->
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" as="style" crossorigin="anonymous">
   <link rel="preload" href="assets/css/styles.css" as="style">
-  <link rel="preload" href="assets/js/vanilla-app.js" as="script">
+  <link rel="preload" href="assets/js/app.js" as="script">
   
   <!-- DNS Prefetch for external resources -->
   <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
   <link rel="dns-prefetch" href="//unpkg.com">
   
-  <!-- Bootstrap 5 CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <!-- Bootstrap 5.3.7 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" crossorigin="anonymous">
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
   
-  <!-- PreferredTheme.js for system preference detection -->
-  <script>
-    // Initialize theme preference detection
-    (function() {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-      const prefersLight = window.matchMedia('(prefers-color-scheme: light)');
-      const prefersHighContrast = window.matchMedia('(prefers-contrast: high)');
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      
-      // Store system preferences
-      window.systemPreferences = {
-        colorScheme: prefersDark.matches ? 'dark' : 'light',
-        highContrast: prefersHighContrast.matches,
-        reducedMotion: prefersReducedMotion.matches
-      };
-      
-      // Listen for changes
-      prefersDark.addEventListener('change', (e) => {
-        window.systemPreferences.colorScheme = e.matches ? 'dark' : 'light';
-        if (document.body.classList.contains('theme-auto')) {
-          window.dispatchEvent(new CustomEvent('systemThemeChange', { 
-            detail: { theme: window.systemPreferences.colorScheme } 
-          }));
-        }
-      });
-      
-      prefersHighContrast.addEventListener('change', (e) => {
-        window.systemPreferences.highContrast = e.matches;
-        document.documentElement.classList.toggle('high-contrast', e.matches);
-      });
-      
-      prefersReducedMotion.addEventListener('change', (e) => {
-        window.systemPreferences.reducedMotion = e.matches;
-        document.documentElement.classList.toggle('reduced-motion', e.matches);
-      });
-      
-      // Apply initial classes
-      if (window.systemPreferences.highContrast) {
-        document.documentElement.classList.add('high-contrast');
-      }
-      if (window.systemPreferences.reducedMotion) {
-        document.documentElement.classList.add('reduced-motion');
-      }
-    })();
-        // Initialize theme system on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize translation manager
-            if (typeof TranslationManager !== 'undefined') {
-                window.translationManager = new TranslationManager();
-            }
-            
-            // Initialize theme from localStorage or system preference
-            initializeTheme();
-            
-            // Initialize language system
-            initializeLanguage();
-            
-            // Theme switching functionality
-            document.querySelectorAll('.theme-option').forEach(option => {
-                option.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const theme = this.dataset.theme;
-                    setTheme(theme);
-                    
-                    // Update UI
-                    updateThemeDropdown(theme);
-                });
-            });
-            
-            // Language switching functionality
-            document.querySelectorAll('.language-option').forEach(option => {
-                option.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const lang = this.dataset.locale;
-                    const flagIcon = this.querySelector('span').textContent;
-                    const languageName = this.querySelector('.fw-semibold').textContent;
-                    const langCode = this.dataset.locale.toUpperCase();
-                    
-                    setLanguage(lang);
-                    
-                    // Update dropdown display
-                    updateLanguageDropdown(lang, flagIcon, languageName, langCode);
-                });
-            });
-        });
-
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('preferred-theme') || 'auto';
-            setTheme(savedTheme);
-            updateThemeDropdown(savedTheme);
-        }
-
-        function setTheme(theme) {
-            const body = document.body;
-            
-            // Remove existing theme classes
-            body.classList.remove('theme-light', 'theme-dark');
-            
-            if (theme === 'light') {
-                body.classList.add('theme-light');
-                body.setAttribute('data-theme', 'light');
-            } else if (theme === 'dark') {
-                body.classList.add('theme-dark');
-                body.setAttribute('data-theme', 'dark');
-            } else {
-                // Auto theme - use system preference
-                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (systemPrefersDark) {
-                    body.classList.add('theme-dark');
-                    body.setAttribute('data-theme', 'dark');
-                } else {
-                    body.classList.add('theme-light');
-                    body.setAttribute('data-theme', 'light');
-                }
-            }
-            
-            // Save preference
-            localStorage.setItem('preferred-theme', theme);
-        }
-
-        function updateThemeDropdown(activeTheme) {
-            const themeButton = document.querySelector('[data-bs-toggle="dropdown"]#themeDropdown');
-            const themeOptions = document.querySelectorAll('.theme-option');
-            
-            // Remove active state from all options
-            themeOptions.forEach(option => {
-                option.classList.remove('active');
-                option.querySelector('.theme-check').style.display = 'none';
-            });
-            
-            // Add active state to selected option
-            const activeOption = document.querySelector(`.theme-option[data-theme="${activeTheme}"]`);
-            if (activeOption) {
-                activeOption.classList.add('active');
-                activeOption.querySelector('.theme-check').style.display = 'inline';
-                
-                // Update button text and icon
-                const optionIcon = activeOption.querySelector('i').className;
-                const optionText = activeOption.querySelector('.fw-semibold').textContent;
-                
-                themeButton.innerHTML = `
-                    <i class="${optionIcon} me-1"></i>
-                    <span class="ms-1">${optionText}</span>
-                `;
-            }
-        }
-
-        function initializeLanguage() {
-            const savedLang = localStorage.getItem('preferred-language') || 'pl';
-            const languageOption = document.querySelector(`.language-option[data-locale="${savedLang}"]`);
-            
-            if (languageOption) {
-                const flagIcon = languageOption.querySelector('span').textContent;
-                const languageName = languageOption.querySelector('.fw-semibold').textContent;
-                const langCode = languageOption.dataset.locale.toUpperCase();
-                
-                setLanguage(savedLang);
-                updateLanguageDropdown(savedLang, flagIcon, languageName, langCode);
-            }
-        }
-
-        function setLanguage(lang) {
-            // Use the translation manager if available
-            if (window.translationManager && typeof window.translationManager.setLanguage === 'function') {
-                window.translationManager.setLanguage(lang).then(() => {
-                    window.translationManager.updateDOM();
-                });
-            }
-            
-            // Save preference
-            localStorage.setItem('preferred-language', lang);
-            
-            // Update HTML lang attribute
-            document.documentElement.lang = lang;
-        }
-
-        function updateLanguageDropdown(activeLang, flagIcon, languageName, langCode) {
-            const languageButton = document.querySelector('#langDropdown');
-            const languageOptions = document.querySelectorAll('.language-option');
-            
-            // Remove active state from all options
-            languageOptions.forEach(option => {
-                option.classList.remove('active');
-            });
-            
-            // Add active state to selected option
-            const activeOption = document.querySelector(`.language-option[data-locale="${activeLang}"]`);
-            if (activeOption) {
-                activeOption.classList.add('active');
-                
-                // Update navbar language display
-                document.getElementById('currentLangFlag').textContent = flagIcon;
-                document.getElementById('currentLangCode').textContent = langCode;
-            }
-        }
-
-        // Listen for system theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-            const currentTheme = localStorage.getItem('preferred-theme');
-            if (currentTheme === 'auto' || !currentTheme) {
-                setTheme('auto');
-            }
-        });
-    </script>
   
   <!-- Custom CSS -->
   <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/modern-styles.css">
   
-  <!-- Fallback CSS for when external CDNs are blocked -->
-  <style>
-    /* Basic Bootstrap-like fallback styles */
-    * { box-sizing: border-box; }
-    body { 
-      margin: 0; 
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      line-height: 1.5;
-      color: #212529;
-      background: #f8f9fa;
-    }
-    .container-fluid { width: 100%; padding: 0 15px; margin: 0 auto; }
-    .row { display: flex; flex-wrap: wrap; margin: 0 -15px; }
-    .col-12 { flex: 0 0 100%; max-width: 100%; padding: 0 15px; }
-    .col-lg-6 { flex: 0 0 50%; max-width: 50%; padding: 0 15px; }
-    .col-md-6 { flex: 0 0 50%; max-width: 50%; padding: 0 15px; }
-    
-    /* Navbar styles */
-    .navbar { 
-      position: sticky; 
-      top: 0; 
-      z-index: 1020; 
-      background: #f8f9fa !important; 
-      padding: 0.5rem 1rem; 
-      border-bottom: 1px solid #dee2e6;
-      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    }
-    .navbar-brand { 
-      display: flex; 
-      align-items: center; 
-      font-size: 1.25rem; 
-      font-weight: 700; 
-      color: #212529 !important; 
-      text-decoration: none; 
-    }
-    .navbar-nav { 
-      display: flex; 
-      list-style: none; 
-      margin: 0; 
-      padding: 0; 
-      flex-direction: row; 
-    }
-    .nav-item { margin: 0 0.5rem; }
-    .nav-link { 
-      color: #6c757d !important; 
-      text-decoration: none; 
-      padding: 0.5rem 1rem; 
-      border-radius: 0.25rem;
-      transition: all 0.2s;
-    }
-    .nav-link:hover { color: #007bff !important; background: rgba(0, 123, 255, 0.1); }
-    .nav-link.active { color: #007bff !important; background: rgba(0, 123, 255, 0.1); }
-    
-    /* Cards */
-    .card { 
-      background: #fff; 
-      border: 1px solid #dee2e6; 
-      border-radius: 0.375rem; 
-      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-      margin-bottom: 1rem;
-    }
-    .card-body { padding: 1.25rem; }
-    .card-header { 
-      padding: 0.75rem 1.25rem; 
-      background: #f8f9fa; 
-      border-bottom: 1px solid #dee2e6; 
-      font-weight: 600;
-    }
-    
-    /* Forms */
-    .form-control { 
-      width: 100%; 
-      padding: 0.375rem 0.75rem; 
-      font-size: 1rem; 
-      border: 1px solid #ced4da; 
-      border-radius: 0.375rem; 
-      background: #fff;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    .form-control:focus { 
-      border-color: #007bff; 
-      outline: 0; 
-      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); 
-    }
-    .form-label { 
-      display: block; 
-      margin-bottom: 0.5rem; 
-      font-weight: 500; 
-    }
-    .input-group { 
-      display: flex; 
-      width: 100%; 
-      margin-bottom: 1rem; 
-    }
-    .input-group-text { 
-      padding: 0.375rem 0.75rem; 
-      background: #007bff; 
-      color: #fff; 
-      border: 1px solid #007bff; 
-      border-radius: 0.375rem 0 0 0.375rem; 
-    }
-    .input-group .form-control { 
-      border-radius: 0 0.375rem 0.375rem 0; 
-      border-left: 0; 
-    }
-    
-    /* Buttons */
-    .btn { 
-      display: inline-block; 
-      padding: 0.375rem 0.75rem; 
-      font-size: 1rem; 
-      border: 1px solid transparent; 
-      border-radius: 0.375rem; 
-      text-decoration: none; 
-      cursor: pointer; 
-      transition: all 0.15s;
-    }
-    .btn-primary { 
-      background: #007bff; 
-      border-color: #007bff; 
-      color: #fff; 
-    }
-    .btn-primary:hover { 
-      background: #0056b3; 
-      border-color: #0056b3; 
-    }
-    .btn-success { 
-      background: #28a745; 
-      border-color: #28a745; 
-      color: #fff; 
-    }
-    .btn-success:hover { 
-      background: #218838; 
-      border-color: #218838; 
-    }
-    .btn-outline-primary { 
-      background: transparent; 
-      border-color: #007bff; 
-      color: #007bff; 
-    }
-    .btn-outline-primary:hover { 
-      background: #007bff; 
-      color: #fff; 
-    }
-    .btn-sm { 
-      padding: 0.25rem 0.5rem; 
-      font-size: 0.875rem; 
-    }
-    .btn-lg { 
-      padding: 0.5rem 1rem; 
-      font-size: 1.125rem; 
-    }
-    
-    /* Utilities */
-    .d-flex { display: flex !important; }
-    .align-items-center { align-items: center !important; }
-    .justify-content-between { justify-content: space-between !important; }
-    .text-center { text-align: center !important; }
-    .text-muted { color: #6c757d !important; }
-    .text-primary { color: #007bff !important; }
-    .text-success { color: #28a745 !important; }
-    .fw-bold { font-weight: 700 !important; }
-    .fw-semibold { font-weight: 600 !important; }
-    .mb-0 { margin-bottom: 0 !important; }
-    .mb-1 { margin-bottom: 0.25rem !important; }
-    .mb-2 { margin-bottom: 0.5rem !important; }
-    .mb-3 { margin-bottom: 1rem !important; }
-    .mb-4 { margin-bottom: 1.5rem !important; }
-    .me-2 { margin-right: 0.5rem !important; }
-    .me-3 { margin-right: 1rem !important; }
-    .ms-1 { margin-left: 0.25rem !important; }
-    .mt-3 { margin-top: 1rem !important; }
-    .mt-4 { margin-top: 1.5rem !important; }
-    .py-4 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
-    .p-4 { padding: 1.5rem !important; }
-    .g-4 > * { padding: 1.5rem; }
-    .gap-2 > * { margin-right: 0.5rem; }
-    .rounded-circle { border-radius: 50% !important; }
-    .bg-primary { background-color: #007bff !important; }
-    .bg-success { background-color: #28a745 !important; }
-    .bg-light { background-color: #f8f9fa !important; }
-    .bg-opacity-10 { opacity: 0.1; }
-    .badge { 
-      display: inline-block; 
-      padding: 0.25em 0.6em; 
-      font-size: 0.75em; 
-      border-radius: 0.375rem; 
-    }
-    .badge.bg-info { background-color: #17a2b8 !important; color: #fff; }
-    .fs-6 { font-size: 1rem !important; }
-    .px-3 { padding-left: 1rem !important; padding-right: 1rem !important; }
-    .py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
-    
-    /* Grid system responsive */
-    @media (max-width: 768px) {
-      .col-lg-6, .col-md-6 { flex: 0 0 100%; max-width: 100%; }
-      .navbar-nav { flex-direction: column; }
-    }
-    
-    /* Loading and display utilities */
-    .d-none { display: none !important; }
-    .d-block { display: block !important; }
-    
-    /* Tab styles */
-    [data-tab-content] { display: none; }
-    [data-tab-content][style*="block"] { display: block !important; }
-    
-    /* Map placeholder */
-    #map { 
-      height: 400px; 
-      background: #e9ecef; 
-      border: 1px solid #dee2e6; 
-      border-radius: 0.375rem; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      color: #6c757d; 
-    }
-    
-    /* Remove problematic styles that might cause layout issues */
-    .sticky-top { position: sticky; top: 0; z-index: 1020; }
-    .shadow-sm { box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important; }
-    .border-bottom { border-bottom: 1px solid #dee2e6 !important; }
-    
-    /* Hide dropdowns initially */
-    .dropdown-menu { display: none; }
-    
-    /* Simple button toggle */
-    .navbar-toggler { 
-      background: none; 
-      border: 1px solid #rgba(0,0,0,.1); 
-      padding: 0.25rem 0.75rem; 
-      border-radius: 0.375rem; 
-    }
-  </style>
   
   <!-- Structured Data for SEO -->
   <script type="application/ld+json">
@@ -605,21 +167,72 @@
               </span>
             </li>
             
-            <!-- Simplified Language Dropdown -->
-            <li class="nav-item me-2">
+            <!-- Language Dropdown -->
+            <li class="nav-item dropdown me-2">
               <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="langDropdown" 
+                 role="button" data-bs-toggle="dropdown" aria-expanded="false"
                  title="Select application language">
                 <span id="currentLangFlag">🇺🇸</span>
                 <span id="currentLangCode" class="ms-1">EN</span>
               </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                <li><h6 class="dropdown-header">🌐 Select Language</h6></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="en">
+                  <span>🇺🇸</span> <span class="fw-semibold">English</span> <span class="text-muted">(EN)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="pl">
+                  <span>🇵🇱</span> <span class="fw-semibold">Polski</span> <span class="text-muted">(PL)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="de">
+                  <span>🇩🇪</span> <span class="fw-semibold">Deutsch</span> <span class="text-muted">(DE)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="fr">
+                  <span>🇫🇷</span> <span class="fw-semibold">Français</span> <span class="text-muted">(FR)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="es">
+                  <span>🇪🇸</span> <span class="fw-semibold">Español</span> <span class="text-muted">(ES)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="it">
+                  <span>🇮🇹</span> <span class="fw-semibold">Italiano</span> <span class="text-muted">(IT)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="nl">
+                  <span>🇳🇱</span> <span class="fw-semibold">Nederlands</span> <span class="text-muted">(NL)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="ru">
+                  <span>🇷🇺</span> <span class="fw-semibold">Русский</span> <span class="text-muted">(RU)</span>
+                </a></li>
+                <li><a class="dropdown-item language-option" href="#" data-locale="zh">
+                  <span>🇨🇳</span> <span class="fw-semibold">中文</span> <span class="text-muted">(ZH)</span>
+                </a></li>
+              </ul>
             </li>
             
-            <!-- Simplified Theme Dropdown -->
-            <li class="nav-item">
+            <!-- Theme Dropdown -->
+            <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle hover-scale d-flex align-items-center" href="#" id="themeDropdown" 
+                 role="button" data-bs-toggle="dropdown" aria-expanded="false"
                  title="Switch theme">
+                <i class="bi bi-circle-half me-1"></i>
                 <span class="ms-1">Auto</span>
               </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+                <li><h6 class="dropdown-header">🎨 Select Theme</h6></li>
+                <li><a class="dropdown-item theme-option" href="#" data-theme="light">
+                  <i class="bi bi-sun-fill me-2"></i>
+                  <span class="fw-semibold">Light</span>
+                  <i class="bi bi-check theme-check ms-auto" style="display: none;"></i>
+                </a></li>
+                <li><a class="dropdown-item theme-option" href="#" data-theme="dark">
+                  <i class="bi bi-moon-fill me-2"></i>
+                  <span class="fw-semibold">Dark</span>
+                  <i class="bi bi-check theme-check ms-auto" style="display: none;"></i>
+                </a></li>
+                <li><a class="dropdown-item theme-option active" href="#" data-theme="auto">
+                  <i class="bi bi-circle-half me-2"></i>
+                  <span class="fw-semibold">Auto</span>
+                  <i class="bi bi-check theme-check ms-auto" style="display: inline;"></i>
+                </a></li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -747,6 +360,7 @@
                   </div>
                 </div>
                 
+                <form id="zipForm">
                 <div class="input-group input-group-lg mb-3">
                   <span class="input-group-text bg-primary text-white border-0">
                     📮
@@ -777,15 +391,17 @@
                 <div class="d-grid gap-2">
                   <button 
                     id="zipLookupBtn"
-                    class="btn btn-primary btn-lg hover-lift shadow-sm" 
+                    class="btn btn-primary btn-lg hover-lift shadow-sm btn-search" 
+                    type="submit"
                     data-loading="lookupCity"
                     title="Lookup city for this ZIP code"
                   >
-                    🔍
+                    <i class="bi bi-search"></i>
                     <span data-i18n="lookupCity">Lookup City</span>
                     <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
                   </button>
                 </div>
+                </form>
                 
                 <!-- ZIP Code Examples -->
                 <div class="mt-3">
@@ -819,6 +435,7 @@
                   </div>
                 </div>
                 
+                <form id="cityForm">
                 <div class="input-group input-group-lg mb-3">
                   <span class="input-group-text bg-success text-white border-0">
                     📍
@@ -848,15 +465,17 @@
                 <div class="d-grid gap-2">
                   <button 
                     id="cityLookupBtn"
-                    class="btn btn-success btn-lg hover-lift shadow-sm" 
+                    class="btn btn-success btn-lg hover-lift shadow-sm btn-search" 
+                    type="submit"
                     data-loading="lookupZip"
                     title="Lookup ZIP codes for this city"
                   >
-                    🔍
+                    <i class="bi bi-search"></i>
                     <span data-i18n="lookupZip">Lookup ZIP</span>
                     <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
                   </button>
                 </div>
+                </form>
                 
                 <!-- City Examples -->
                 <div class="mt-3">
@@ -991,6 +610,11 @@
               <!-- Results Table Container -->
               <div id="resultsTable" class="table-responsive">
                 <!-- Dynamic table content will be inserted here -->
+              </div>
+              
+              <!-- Results Container for App.js -->
+              <div id="resultsContainer" class="p-3">
+                <!-- Dynamic results will be inserted here by app.js -->
               </div>
               
               <!-- Results Pagination -->
@@ -1559,8 +1183,8 @@
   </div>
 
   <!-- Scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
   <!-- Translation System -->
@@ -1576,51 +1200,51 @@
   <script src="assets/js/translations/zh.js"></script>
   
   <!-- Custom Application Script -->
-  <script src="assets/js/vanilla-app.js"></script>
+  <script src="assets/js/app.js"></script>
   
-  <!-- Initialize Translation Manager -->
+  <!-- Initialize Translation Manager and App -->
   <script>
-    // Initialize the translation manager immediately
-    window.translationManager = new TranslationManager();
-    
-    // Load English as default and then initialize the app
-    window.translationManager.loadTranslation('en').then(() => {
-      window.translationManager.currentLanguage = 'en';
-      console.log('Default language (en) loaded');
+    // Debug Bootstrap and jQuery loading
+    $(document).ready(function() {
+      console.log('jQuery loaded:', typeof $);
+      console.log('Bootstrap loaded:', typeof bootstrap);
       
-      // Initialize the Polish ZIP Lookup app after translations are ready
-      document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded, initializing app...');
-        
-        // Initialize the main application
-        try {
-          window.app = new PolishZipLookup();
-          console.log('App initialized successfully:', window.app);
-        } catch (error) {
-          console.error('Failed to initialize app:', error);
-        }
-        
-        // Auto-detect language preference
-        window.translationManager.autoDetectLanguage().then(() => {
-          // Update the app's locale to match detected language
-          if (window.app) {
-            window.app.state.locale = window.translationManager.currentLanguage;
-            window.app.updateUI();
-            console.log('App locale updated to:', window.translationManager.currentLanguage);
-          }
+      // Check if dropdowns can be manually triggered
+      if (typeof bootstrap !== 'undefined' && bootstrap.Dropdown) {
+        console.log('Bootstrap Dropdown available');
+        // Initialize dropdowns manually
+        const dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+        const dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+          return new bootstrap.Dropdown(dropdownToggleEl);
         });
-      });
-    }).catch((error) => {
-      console.error('Failed to load default translations:', error);
-      // Still try to initialize the app even if translations fail
-      document.addEventListener('DOMContentLoaded', function() {
-        try {
-          window.app = new PolishZipLookup();
-          console.log('App initialized with fallback');
-        } catch (error) {
-          console.error('Failed to initialize app with fallback:', error);
-        }
-      });
+        console.log('Dropdowns initialized:', dropdownList.length);
+      } else {
+        console.error('Bootstrap Dropdown not available');
+      }
+      
+      // Initialize the translation manager
+      if (typeof TranslationManager !== 'undefined') {
+        window.translationManager = new TranslationManager();
+        
+        // Load default language (Polish)
+        window.translationManager.loadTranslation('pl').then(() => {
+          window.translationManager.currentLanguage = 'pl';
+          console.log('Default language (pl) loaded');
+          
+          // Auto-detect and apply user language preference
+          window.translationManager.autoDetectLanguage().then(() => {
+            console.log('Language auto-detection completed');
+          }).catch((error) => {
+            console.warn('Language auto-detection failed:', error);
+          });
+        }).catch((error) => {
+          console.error('Failed to load default translations:', error);
+        });
+      } else {
+        console.warn('TranslationManager not available');
+      }
+      
+      console.log('Polish ZIP App initialized with Bootstrap & jQuery');
     });
   </script>
 </body>
