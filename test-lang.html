@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head><title>Language Test</title></head>
+<body>
+<h1>Language Switcher Test</h1>
+<button onclick="switchToPolish()">Switch to Polish</button>
+<button onclick="switchToGerman()">Switch to German</button>
+<div id="content">
+    <h2 data-i18n="singleLookup">Single Lookup</h2>
+    <p data-i18n="singleLookupDesc">Enter a ZIP code to find its city, or a city name to find postal codes.</p>
+    <input type="text" data-i18n-placeholder="zipPlaceholder" placeholder="00-001 or 00001">
+</div>
+
+<script src="assets/js/translations/manager.js"></script>
+<script src="assets/js/translations/en.js"></script>
+<script src="assets/js/translations/pl.js"></script>
+<script src="assets/js/translations/de.js"></script>
+<script>
+function switchToPolish() {
+    if (!window.translationManager) {
+        window.translationManager = new TranslationManager();
+    }
+    window.translationManager.setLanguage('pl').then(() => {
+        console.log('Switched to Polish');
+    });
+}
+
+function switchToGerman() {
+    if (!window.translationManager) {
+        window.translationManager = new TranslationManager();
+    }
+    window.translationManager.setLanguage('de').then(() => {
+        console.log('Switched to German');
+    });
+}
+
+// Initialize with Polish
+window.onload = function() {
+    switchToPolish();
+};
+</script>
+</body>
+</html>

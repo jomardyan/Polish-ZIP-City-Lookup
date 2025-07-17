@@ -232,9 +232,30 @@ $(document).ready(function() {
         initLanguageSystem: function() {
             const self = this;
             
+            // Don't override if translation manager already set up language
+            if (window.translationManager && window.translationManager.currentLanguage) {
+                console.log('Translation manager already initialized with language:', window.translationManager.currentLanguage);
+                this.updateLanguageDropdown(window.translationManager.currentLanguage);
+                return;
+            }
+            
             // Get saved language or default to Polish
             const savedLang = localStorage.getItem('preferred-language') || 'pl';
-            this.setLanguage(savedLang);
+            
+            // Ensure translation manager is available and set language
+            if (window.translationManager) {
+                console.log('Setting language to:', savedLang);
+                this.setLanguage(savedLang);
+            } else {
+                console.warn('Translation manager not available during initLanguageSystem');
+                // Fallback: try to set language after a short delay
+                setTimeout(() => {
+                    if (window.translationManager) {
+                        console.log('Setting language (delayed) to:', savedLang);
+                        this.setLanguage(savedLang);
+                    }
+                }, 100);
+            }
             
             // Handle language dropdown clicks using event delegation
             $(document).on('click', '.language-option', function(e) {

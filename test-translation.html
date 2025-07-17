@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Test</title>
+</head>
+<body>
+    <h1 data-i18n="singleLookup">Single Lookup</h1>
+    <p data-i18n="singleLookupDesc">Enter a ZIP code to find its city, or a city name to find postal codes.</p>
+    <input type="text" data-i18n-placeholder="zipPlaceholder" placeholder="00-001 or 00001">
+    
+    <button onclick="testTranslation()">Test Polish Translation</button>
+    
+    <script src="assets/js/translations/manager.js"></script>
+    <script src="assets/js/translations/pl.js"></script>
+    <script>
+        function testTranslation() {
+            if (window.translationManager) {
+                window.translationManager.loadTranslation('pl').then(() => {
+                    window.translationManager.currentLanguage = 'pl';
+                    window.translationManager.updateDOM();
+                    console.log('Translation updated');
+                });
+            } else {
+                window.translationManager = new TranslationManager();
+                window.translationManager.loadTranslation('pl').then(() => {
+                    window.translationManager.currentLanguage = 'pl';
+                    window.translationManager.updateDOM();
+                    console.log('Translation updated');
+                });
+            }
+        }
+        
+        // Auto test
+        window.onload = function() {
+            testTranslation();
+        };
+    </script>
+</body>
+</html>

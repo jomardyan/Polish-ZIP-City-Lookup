@@ -56,6 +56,7 @@ class TranslationManager {
     try {
       await this.loadTranslation(lang);
       this.currentLanguage = lang;
+      this.updateDOM(); // Automatically update DOM when language changes
       return true;
     } catch (error) {
       console.warn(`Failed to set language to ${lang}, falling back to ${this.fallbackLanguage}`);
@@ -75,16 +76,19 @@ class TranslationManager {
   t(key, lang = null) {
     const targetLang = lang || this.currentLanguage;
     
+    // Use window.translations directly to get the latest translations
+    const translations = window.translations || {};
+    
     // Try current/specified language first
-    if (this.translations[targetLang] && this.translations[targetLang][key]) {
-      return this.translations[targetLang][key];
+    if (translations[targetLang] && translations[targetLang][key]) {
+      return translations[targetLang][key];
     }
     
     // Fallback to fallback language
     if (targetLang !== this.fallbackLanguage && 
-        this.translations[this.fallbackLanguage] && 
-        this.translations[this.fallbackLanguage][key]) {
-      return this.translations[this.fallbackLanguage][key];
+        translations[this.fallbackLanguage] && 
+        translations[this.fallbackLanguage][key]) {
+      return translations[this.fallbackLanguage][key];
     }
     
     // Return key if no translation found (reduce console spam in production)
@@ -99,7 +103,7 @@ class TranslationManager {
    * @returns {Array} Array of language codes
    */
   getAvailableLanguages() {
-    return Object.keys(this.translations);
+    return Object.keys(window.translations || {});
   }
 
   /**
