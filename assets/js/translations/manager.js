@@ -33,6 +33,7 @@ class TranslationManager {
       
       script.onload = () => {
         this.loadedLanguages.add(lang);
+        // eslint-disable-next-line no-console
         console.log(`Translation loaded: ${lang}`);
         resolve();
       };
@@ -87,7 +88,7 @@ class TranslationManager {
     }
     
     // Return key if no translation found (reduce console spam in production)
-    if (process.env.NODE_ENV !== 'production') {
+    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
       console.warn(`Translation not found: ${key} (${targetLang})`);
     }
     return key;
